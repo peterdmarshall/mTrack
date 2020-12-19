@@ -1,6 +1,6 @@
 # README
 
-This is the API backend for the mTrack issue tracker.
+mTrack is a Kanban style project management application.
 
 Things you may want to cover:
 
