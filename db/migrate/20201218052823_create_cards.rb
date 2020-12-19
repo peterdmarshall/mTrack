@@ -1,6 +1,6 @@
-class CreateIssues < ActiveRecord::Migration[6.0]
+class CreateCards < ActiveRecord::Migration[6.0]
   def change
-    create_table :issues do |t|
+    create_table :cards do |t|
       t.belongs_to :board
       t.text :body
       t.string :title

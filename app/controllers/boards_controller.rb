@@ -3,13 +3,13 @@ class BoardsController < SecuredController
     skip_before_action :authorize_request, only: [:index, :show]
 
     def index
-        boards = Board.includes(:issues).all
+        boards = Board.includes(:cards).all
         render json: boards 
     end
 
     def show
-        board = Board.includes(:issues).find(params[:id])
-        render json: { "board": board, "issues": board.issues }
+        board = Board.includes(:cards).find(params[:id])
+        render json: { "board": board, "cards": board.cards }
     rescue ActiveRecord::RecordNotFound
         head :not_found
     end

@@ -22,14 +22,14 @@ ActiveRecord::Schema.define(version: 2020_12_19_003045) do
     t.index ["board_owner_type", "board_owner_id"], name: "index_boards_on_board_owner_type_and_board_owner_id"
   end
 
-  create_table "issues", force: :cascade do |t|
+  create_table "cards", force: :cascade do |t|
     t.integer "board_id"
     t.text "body"
     t.string "title"
     t.string "category"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["board_id"], name: "index_issues_on_board_id"
+    t.index ["board_id"], name: "index_cards_on_board_id"
   end
 
   create_table "team_memberships", force: :cascade do |t|
