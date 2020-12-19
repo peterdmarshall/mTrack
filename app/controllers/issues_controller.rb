@@ -4,7 +4,7 @@ class IssuesController < SecuredController
 
     def index
         issues = Issue.all
-        render json: issues
+        render json: issues 
     end
 
     def show
@@ -28,6 +28,6 @@ class IssuesController < SecuredController
     private
 
     def issue_params
-        params.permit(:body, :title)
+        params.permit(:body, :title, :category, :board_id)
     end
 end

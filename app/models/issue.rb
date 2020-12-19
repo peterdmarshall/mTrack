@@ -1,3 +1,5 @@
 class Issue < ApplicationRecord
-    validates_presence_of :body, :title
+    belongs_to :board
+
+    validates_presence_of :body, :title, :category
 end

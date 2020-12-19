@@ -1,0 +1,2 @@
+class TeamsController < SecuredController
+end
