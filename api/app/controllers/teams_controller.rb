@@ -1,2 +1,0 @@
-class TeamsController < SecuredController
-end
