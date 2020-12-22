@@ -5,8 +5,6 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     @user = users(:one)
   end
 
-  # Tests for SHOW action
-  # GET /users/:id
   test 'should show user' do
     get api_v1_user_url(@user), as: :json
     assert_response :success
@@ -15,8 +13,6 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user.email, json_response['email']
   end
 
-  # Tests for CREATE action
-  # POST /users
   test 'should create user' do
     assert_difference('User.count') do
       post api_v1_users_url, params: { user: { email: 'test@test.org', password: '123456' } }, as: :json
@@ -31,8 +27,6 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  # Test for UPDATE action
-  # PATCH/PUT /users/:id
   test 'should update user' do
     patch api_v1_user_url(@user), params: { user: { email: @user.email, password: '123456' } }, as: :json
     assert_response :success
@@ -43,8 +37,6 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  # Test for DESTROY action
-  # DELETE /users/:id
   test 'should destroy user' do
     assert_difference('User.count', -1) do
       delete api_v1_user_url(@user), as: :json

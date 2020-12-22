@@ -2,8 +2,5 @@
 
 one:
   email: one@one.org
-  password_digest: hashed_password
+  password_digest: <%= BCrypt::Password.create('good_password') %>
 
-two:
-  email: two@two.org
-  password_digest: hashed_password
