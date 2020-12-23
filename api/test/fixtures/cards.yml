@@ -6,5 +6,5 @@
 #
 one: 
   title: 'Test Title'
-  body: 'Test Body'
+  description: 'Test Body'
   board: one
