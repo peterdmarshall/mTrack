@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class BoardTest < ActiveSupport::TestCase
-  test 'should have a non-empty title' do
+  test 'should have a non-empty name' do
     board = boards(:one)
-    board.title = ''
+    board.name = ''
     assert_not board.valid?
   end
 end
