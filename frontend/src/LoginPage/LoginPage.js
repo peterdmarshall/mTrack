@@ -12,7 +12,7 @@ function LoginPage(props) {
 
     useEffect(() => {
         dispatch(userActions.logout());
-    }, []);
+    }, [dispatch]);
 
     const handleEmailChange = (e) => {
         const { value } = e.target;

@@ -2,6 +2,11 @@ class Api::V1::UsersController < ApplicationController
     before_action :set_user, only: [:show, :update, :destroy]
     before_action :check_owner, only: [:update, :destroy]
     
+    # GET /users
+    def index
+        render json: User.all
+    end
+
     # GET /users/:id
     def show
         render json: @user

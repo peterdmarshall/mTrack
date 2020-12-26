@@ -23,10 +23,8 @@ function App(props) {
         <div>{alert.message}</div>
       }
       <Router history={history}>
-        <div>
           <PrivateRoute exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
-        </div>
       </Router>
     </div>
   );
@@ -36,7 +34,7 @@ const mapStateToProps = (state) => {
   const { alert } = state;
   return {
     alert
-  }
+  };
 }
 
 const connectedApp = connect(mapStateToProps)(App);
