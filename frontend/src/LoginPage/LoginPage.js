@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { userActions } from '../actions/user.actions';
 
@@ -7,8 +8,9 @@ function LoginPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const history = useHistory();
 
-    const { dispatch, loggingIn } = props;
+    const { dispatch, loggingIn, loggedIn } = props;
 
     useEffect(() => {
         dispatch(userActions.logout());
@@ -31,6 +33,10 @@ function LoginPage(props) {
         if(email && password) {
             dispatch(userActions.login(email, password));
         }
+    }
+
+    if(loggedIn) {
+        history.push('/');
     }
 
     return (
@@ -64,9 +70,10 @@ function LoginPage(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { loggingIn } = state.authentication;
+    const { loggingIn, loggedIn } = state.authentication;
     return {
-        loggingIn
+        loggingIn,
+        loggedIn
     };
 }
 

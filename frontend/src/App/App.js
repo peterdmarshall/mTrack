@@ -1,8 +1,7 @@
-import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, useHistory, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { history } from '../helpers/history';
 import { alertActions } from '../actions/alert.actions';
 import { PrivateRoute } from '../components/PrivateRoute';
 import { HomePage } from '../HomePage/HomePage';
@@ -11,10 +10,14 @@ import { LoginPage } from '../LoginPage/LoginPage';
 function App(props) {
   const { dispatch } = props;
   const { alert } = props;
+  const history = useHistory();
 
-  history.listen((location, action) => {
-    dispatch(alertActions.clear());
-  });
+  useEffect(() => {
+    history.listen((location, action) => {
+      dispatch(alertActions.clear());
+    });
+  }, []);
+  
 
 
   return (
@@ -22,10 +25,10 @@ function App(props) {
       {alert.message &&
         <div>{alert.message}</div>
       }
-      <Router history={history}>
+      <Switch>
           <PrivateRoute exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
-      </Router>
+      </Switch>
     </div>
   );
 }
