@@ -4,17 +4,13 @@ import { useHistory } from 'react-router-dom';
 
 import { userActions } from '../actions/user.actions';
 
-function LoginPage(props) {
+function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const history = useHistory();
 
     const { dispatch, loggingIn, loggedIn } = props;
-
-    useEffect(() => {
-        dispatch(userActions.logout());
-    }, [dispatch]);
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
@@ -77,5 +73,5 @@ const mapStateToProps = (state) => {
     };
 }
 
-const connectedLoginPage = connect(mapStateToProps)(LoginPage);
-export { connectedLoginPage as LoginPage };
+const connectedLogin = connect(mapStateToProps)(Login);
+export { connectedLogin as Login };

@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route, useHistory, Switch } from 'react-router
 import { connect } from 'react-redux';
 
 import { alertActions } from '../actions/alert.actions';
-import { PrivateRoute } from '../components/PrivateRoute';
-import { HomePage } from '../HomePage/HomePage';
-import { LoginPage } from '../LoginPage/LoginPage';
-import { BoardPage } from '../BoardPage/BoardPage';
+import { PrivateRoute } from './PrivateRoute';
+import { Home } from './Home';
+import { Login } from './Login';
+import { Board } from './Board';
+import { Signup} from './Signup';
 
 function App(props) {
   const { dispatch } = props;
@@ -27,9 +28,10 @@ function App(props) {
         <div>{alert.message}</div>
       }
       <Switch>
-          <PrivateRoute exact path="/" component={HomePage} />
-          <PrivateRoute path="/board" component={BoardPage} />
-          <Route path="/login" component={LoginPage} />
+          <PrivateRoute exact path="/" component={Home} />
+          <PrivateRoute path="/board" component={Board} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
       </Switch>
     </div>
   );

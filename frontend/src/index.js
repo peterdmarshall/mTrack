@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import 'fontsource-roboto';
 
 import { store } from './helpers/store';
-import { App } from './App/App';
+import { App } from './components/App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

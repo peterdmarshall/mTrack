@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { boardActions } from '../actions/board.actions';
 
-function BoardPage(props) {
+function Board(props) {
 
     const { dispatch, user, board, loadingBoard } = props;
     const history = useHistory();
@@ -40,5 +40,5 @@ const mapStateToProps = (state) => {
     };
 }
 
-const connectedBoardPage = connect(mapStateToProps)(BoardPage);
-export { connectedBoardPage as BoardPage };
+const connectedBoard = connect(mapStateToProps)(Board);
+export { connectedBoard as Board };
