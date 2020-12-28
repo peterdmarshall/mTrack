@@ -13,6 +13,10 @@ function HomePage(props) {
         dispatch(boardActions.getAll(user));
     }, []);
 
+    const loadBoard = (boardId) => {
+        history.push('/board', { boardId: boardId })
+    }
+
     if(!user) {
         history.push('/login');
     }
@@ -28,6 +32,7 @@ function HomePage(props) {
                     <li>
                         <p>Id: {board.id}</p>
                         <p>Name: {board.name}</p>
+                        <button onClick={() => loadBoard(board.id)}>View</button>
                     </li>
                     )
                 })}
@@ -42,7 +47,7 @@ function HomePage(props) {
 const mapStateToProps = (state) => {
     const { authentication } = state;
     const { user } = authentication;
-    const { boards, loadingBoards } = state.boards;
+    const { boards, loadingBoards } = state.board;
     return {
         user,
         boards,
