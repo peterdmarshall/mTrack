@@ -3,11 +3,11 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { alert } from '../reducers/alert.reducer';
 import { authentication } from '../reducers/authentication.reducer';
-import { boards } from '../reducers/boards.reducer';
+import { board } from '../reducers/board.reducer';
 
 const loggerMiddleware = createLogger();
 
-const rootReducer = combineReducers({ alert: alert, authentication: authentication, boards: boards });
+const rootReducer = combineReducers({ alert: alert, authentication: authentication, board: board });
 
 export const store = createStore(
     rootReducer,
