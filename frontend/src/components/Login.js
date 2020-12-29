@@ -12,14 +12,21 @@ const useStyles= makeStyles({
         minHeight: '100vh'
     },
     paper: {
+        position: 'relative',
+        minWidth: '300px',
         width: '50vw',
+        maxWidth: '500px',
+        minHeight: '500px',
         height: '50vh',
         marginTop: '10vw',
         paddingTop: '5vh',
         paddingBottom: '5vh'
     },
     inputField: {
+        minHeight: '40px',
+        minWidth: '200px',
         width: '35vw',
+        maxWidth: '350px',
         marginBottom: '1vh'
     },
     loginButton: {
@@ -28,12 +35,17 @@ const useStyles= makeStyles({
         borderRadius: 3,
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
         color: 'white',
+        minHeight: '50px',
+        minWidth: '200px',
+        maxWidth: '350px',
         height: '6vh',
         width: '35vw',
         padding: '0 30px',
     },
-    signupLink: {
-        marginTop: '2vh'
+    links: {
+        position: 'absolute',
+        bottom: '3vh',
+        marginTop: '6vh'
     }
 });
 
@@ -88,63 +100,67 @@ function Login(props) {
         <Container>
             <Grid container justify="center">
             <Paper elevation={0} className={classes.paper}>
-            <Grid container justify="center">
-                <Grid container item xs={9} spacing={3} direction="column">
-                    <Grid item container justify="center">
-                        <h1>Login</h1>
-                    </Grid>
-                    <Grid item>
-                    <form name="form" onSubmit={handleSubmit}>
-                        <div>
-                            <TextField
-                                id="email-field"
-                                label={emailError ? "Error" : "Email"}
-                                value={email}
-                                onChange={handleEmailChange}
-                                variant="filled"
-                                className={classes.inputField}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                id="password-field"
-                                type="password"
-                                label={passwordError ? "Error" : "Password"}
-                                value={password}
-                                onChange={handlePasswordChange}
-                                variant="filled"
-                                className={classes.inputField}
-                            />
-                        </div>
-                        <div>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={rememberMe}
-                                        onChange={() => setRememberMe(!rememberMe)}
-                                        name="rememberMe"
-                                        color="primary"
-                                    />
-                                }
-                                label="Remember Me"
-                            />
-                        </div>
-                        <div>
-                            {!loggingIn && <Button className={classes.loginButton} type="submit">Login</Button>}
-                            { loggingIn && <CircularProgress />}
-                        </div>
-                    </form>
-                    <Typography className={classes.signupLink}>
-                        Don't have an account?
-                        <Link to="/signup">Sign Up here.</Link>
-                    </Typography>
-                    <Typography className={classes.signupLink}>
-                        Just visiting?
-                        <Link to="/" onClick={() => loginDemoUser()}>Log in as a demo user.</Link>
-                    </Typography>
+                <Grid container justify="center">
+                    <Grid container item xs={9} spacing={3} direction="column">
+                        <Grid item container justify="center">
+                            <h1>Login</h1>
+                        </Grid>
+                        <Grid item>
+                        <form name="form" onSubmit={handleSubmit}>
+                            <div>
+                                <TextField
+                                    id="email-field"
+                                    label={emailError ? "Error" : "Email"}
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    variant="filled"
+                                    className={classes.inputField}
+                                />
+                            </div>
+                            <div>
+                                <TextField
+                                    id="password-field"
+                                    type="password"
+                                    label={passwordError ? "Error" : "Password"}
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                    variant="filled"
+                                    className={classes.inputField}
+                                />
+                            </div>
+                            <div>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={rememberMe}
+                                            onChange={() => setRememberMe(!rememberMe)}
+                                            name="rememberMe"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Remember Me"
+                                />
+                            </div>
+                            <div>
+                                {!loggingIn && <Button className={classes.loginButton} type="submit">Login</Button>}
+                                { loggingIn && <CircularProgress />}
+                            </div>
+                        </form>
+                        <Grid container justify="center">
+                            <Grid item className={classes.links}>
+                                <Typography>
+                                    Don't have an account?
+                                    <Link to="/signup">Sign Up here.</Link>
+                                </Typography>
+                                <Typography>
+                                    Just visiting?
+                                    <Link to="/" onClick={() => loginDemoUser()}>Log in as a demo user.</Link>
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
             </Paper>
             </Grid>
         </Container>
