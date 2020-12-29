@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Card, CardHeader, CardContent, CardActionArea, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core';
+import { Card, CircularProgress, CardContent, CardActionArea, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { boardActions } from '../actions/board.actions';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -26,16 +28,20 @@ const useStyles = makeStyles({
     }
 });
 
-export default function BoardListItem(props) {
+function CreateBoardCard(props) {
 
-    const { board } = props;
+    const { dispatch, user, creatingBoard } = props;
     const [open, setOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+
     const history = useHistory();
     const classes = useStyles();
 
     const content = "Create New Board";
 
     const createBoard = () => {
+        dispatch(boardActions.create(name, description, user));
         handleClose();
     }
 
@@ -45,18 +51,37 @@ export default function BoardListItem(props) {
 
     const handleClose = () => {
         setOpen(false);
+        setName('');
+        setDescription('');
+    }
+
+    const handleNameChange = (e) => {
+        const { value } = e.target;
+        setName(value);
+    }
+
+    const handleDescriptionChange = (e) => {
+        const { value } = e.target;
+        setDescription(value);
     }
 
     return (
         <Grid item xs={12} md={6} lg={4}>
             <Card className={classes.card}>
                 <CardActionArea onClick={handleOpen}>
+                { !creatingBoard &&
                 <CardContent className={classes.cardContent}>
                     <AddIcon className={classes.cardContentItem}></AddIcon>
                     <Typography className={classes.cardContentItem}>
                         {content}
                     </Typography>
                 </CardContent>
+                }
+                { creatingBoard && 
+                <CardContent className={classes.cardContent}>
+                    <CircularProgress className={classes.cardContentItem}/>
+                </CardContent>
+                }
                 </CardActionArea>
             </Card>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -72,6 +97,8 @@ export default function BoardListItem(props) {
                         label="Board Name"
                         variant="filled"
                         fullWidth
+                        value={name}
+                        onChange={handleNameChange}
                     />
                     <TextField
                         id="description"
@@ -80,6 +107,8 @@ export default function BoardListItem(props) {
                         multiline
                         fullWidth
                         rows={4}
+                        value={description}
+                        onChange={handleDescriptionChange}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -94,3 +123,16 @@ export default function BoardListItem(props) {
         </Grid>
     );
 }
+
+const mapStateToProps = (state) => {
+    const { authentication } = state;
+    const { user } = authentication;
+    const { creatingBoard } = state.board;
+    return {
+        user,
+        creatingBoard,
+    };
+}
+
+const connectedCreateBoardCard = connect(mapStateToProps)(CreateBoardCard);
+export { connectedCreateBoardCard as CreateBoardCard };

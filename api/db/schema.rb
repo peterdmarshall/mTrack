@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_013706) do
 
   create_table "boards", force: :cascade do |t|
     t.string "name"
+    t.string "description"
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

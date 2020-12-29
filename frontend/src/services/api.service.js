@@ -4,7 +4,8 @@ import { userService } from './user.service';
 
 export const apiService = {
     getAllBoardsForUser,
-    getUserBoard
+    getUserBoard,
+    createUserBoard
 };
 
 function getAllBoardsForUser(user) {
@@ -42,6 +43,29 @@ function getUserBoard(boardId, user) {
         method: requestOptions.method,
         url: process.env.REACT_APP_API_URL + '/boards/' + boardId,
         headers: requestOptions.headers,
+    })
+    .then(handleResponse)
+    .then(board => {
+        return board;
+    });
+}
+
+function createUserBoard(name, description, user) {
+    if(!user) {
+        return Promise.reject("Not logged in");
+    }
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
+        body: JSON.stringify({ board: { name: name, description: description }})
+    };
+
+    return axios({
+        method: requestOptions.method,
+        headers: requestOptions.headers,
+        url: process.env.REACT_APP_API_URL + '/boards',
+        data: requestOptions.body
     })
     .then(handleResponse)
     .then(board => {

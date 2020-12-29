@@ -24,8 +24,6 @@ export default function BoardListItem(props) {
     const history = useHistory();
     const classes = useStyles();
 
-    const description = "Description text. Description text. Description text.";
-
     const loadBoard = (boardId) => {
         history.push('/board', { boardId: boardId })
     }
@@ -37,7 +35,7 @@ export default function BoardListItem(props) {
                 <CardHeader title={board.name} className={classes.cardHeader}></CardHeader>
                 <CardContent className={classes.cardContent}>
                     <Typography>
-                        {description}
+                        {board.description}
                     </Typography>
                 </CardContent>
                 </CardActionArea>

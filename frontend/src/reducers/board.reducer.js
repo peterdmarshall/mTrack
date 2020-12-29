@@ -22,6 +22,16 @@ export function board(state = {}, action) {
         };
     case boardConstants.GETALL_FAILURE:
         return {};
+    case boardConstants.CREATE_REQUEST:
+        return {
+            creatingBoard: true,
+        };
+    case boardConstants.CREATE_SUCCESS:
+        return {
+            board: action.board,
+        };
+    case boardConstants.CREATE_FAILURE:
+        return {};
     default:
         return state
     }
