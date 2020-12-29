@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { boardActions } from '../actions/board.actions';
-import BoardListItem from './BoardListItem';
-import { List } from '@material-ui/core';
+import BoardCard from './BoardCard';
+import CreateBoardCard from './CreateBoardCard';
+import { Grid } from '@material-ui/core';
 
 
-function BoardList(props) {
+function BoardCardGrid(props) {
 
     const { dispatch, user, boards, loadingBoards } = props;
     const history = useHistory();
@@ -16,12 +17,13 @@ function BoardList(props) {
     }, []);
 
     return (
-        <List>
+        <Grid container >
             { loadingBoards && <p>Loading boards...</p>}
             { boards && boards.map((board) => {
-                return <BoardListItem board={board}></BoardListItem>
+                return <BoardCard board={board}></BoardCard>
             })}
-        </List>
+            <CreateBoardCard />
+        </Grid >
     );
 
 }
@@ -37,5 +39,5 @@ const mapStateToProps = (state) => {
     };
 }
 
-const connectedBoardList = connect(mapStateToProps)(BoardList);
-export { connectedBoardList as BoardList };
+const connectedBoardCardGrid = connect(mapStateToProps)(BoardCardGrid);
+export { connectedBoardCardGrid as BoardCardGrid };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,7 +9,7 @@ import { userActions } from '../actions/user.actions';
 const useStyles= makeStyles({
     root: {
         background: 'linear-gradient(70deg, #3642CF, #BF37AD)',
-        minHeight: '100vh'
+        minHeight: '100vh',
     },
     paper: {
         position: 'relative',
@@ -17,13 +17,13 @@ const useStyles= makeStyles({
         width: '50vw',
         maxWidth: '500px',
         minHeight: '500px',
-        height: '50vh',
+        height: '45vh',
         marginTop: '10vw',
         paddingTop: '5vh',
         paddingBottom: '5vh'
     },
     inputField: {
-        minHeight: '40px',
+        minHeight: '60px',
         minWidth: '200px',
         width: '35vw',
         maxWidth: '350px',
@@ -35,10 +35,10 @@ const useStyles= makeStyles({
         borderRadius: 3,
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
         color: 'white',
-        minHeight: '50px',
+        minHeight: '60px',
         minWidth: '200px',
         maxWidth: '350px',
-        height: '6vh',
+        height: '5vh',
         width: '35vw',
         padding: '0 30px',
     },

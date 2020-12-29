@@ -1,27 +1,65 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { BoardList } from './BoardList';
+import { BoardCardGrid } from './BoardCardGrid';
+import { LogoutButton } from './LogoutButton';
+import { makeStyles } from '@material-ui/core/styles';
+import { FormControlLabel, Divider, List, ListItem, Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography } from '@material-ui/core';
 
-import { userActions } from '../actions/user.actions';
+const useStyles = makeStyles({
+    h3: {
+        margin: 0,
+        padding: 0
+    },
+    content: {
+        width: '80vw',
+        height: '70vh',
+    },
+    sideBar: {
+        height: '70vh',
+        margin: '1vh',
+        background: '#e6e6e6'
+    },
+    mainContent: {
+        height: '70vh',
+        margin: '1vh',
+        background: '#e6e6e6'
+    }
+});
 
 function Home(props) {
-    const { dispatch, user } = props;
+    const { user } = props;
     const history = useHistory();
+    const classes = useStyles();
 
     if(!user) {
         history.push('/login');
     }
 
     return (
-        <div>
-            <h1>Hi {user.email}! </h1>
-            <h3>Board List: </h3>
-            <BoardList />
-            <p>
-                <Link onClick={() => dispatch(userActions.logout())} to="/login">Logout</Link>
-            </p>
-        </div>
+        <Box>
+        <Container>
+            <Grid container position="row">
+                <Grid item xs={3}>
+                    <Paper className={classes.sideBar}>
+                        <List>
+                            <ListItem><Typography>Boards</Typography></ListItem>
+                            <Divider />
+                            <ListItem><Typography>Templates</Typography></ListItem>
+                        </List>
+                    </Paper>
+                </Grid>
+                <Grid item xs={9}>
+                    <Paper className={classes.mainContent}>
+                        <Typography variant="h5">
+                            Your Boards
+                        </Typography>
+                        <BoardCardGrid />
+                    </Paper>
+                </Grid>
+            </Grid>
+        </Container>
+        </Box>
     );
 }
 
