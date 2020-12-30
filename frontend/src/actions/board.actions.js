@@ -5,7 +5,8 @@ import { apiService } from '../services/api.service';
 export const boardActions = {
     getAll,
     get,
-    create
+    create,
+    remove
 };
 
 function getAll(user) {
@@ -70,4 +71,25 @@ function create(name, description, user) {
     function request() { return { type: boardConstants.CREATE_REQUEST } }
     function success(board) { return { type: boardConstants.CREATE_SUCCESS, board } }
     function failure(error) { return { type: boardConstants.CREATE_FAILURE, error } }
+}
+
+function remove(boardId, user) {
+    return dispatch => {
+        dispatch(request(boardId));
+
+        apiService.removeUserBoard(boardId, user)
+            .then(
+                board => {
+                    dispatch(success(board));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error.message));
+                }
+            );
+    };
+
+    function request() { return { type: boardConstants.REMOVE_REQUEST } }
+    function success(board) { return { type: boardConstants.REMOVE_SUCCESS, board } }
+    function failure(error) { return { type: boardConstants.REMOVE_FAILURE, error } }
 }

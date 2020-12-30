@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControlLabel, Checkbox, Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 import { userActions } from '../actions/user.actions';
 
@@ -46,6 +47,9 @@ const useStyles= makeStyles({
         position: 'absolute',
         bottom: '3vh',
         marginTop: '6vh'
+    },
+    failureAlert: {
+        margin: '2% 0'
     }
 });
 
@@ -59,7 +63,7 @@ function Login(props) {
     const history = useHistory();
     const classes = useStyles();
 
-    const { dispatch, loggingIn, loggedIn } = props;
+    const { dispatch, loggingIn, loggedIn, loginFailed } = props;
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
@@ -91,6 +95,13 @@ function Login(props) {
         // Login with a demo user that has populated example data
     }
 
+    if(submitted && loginFailed) {
+        setPasswordError(false);
+        setEmailError(false);
+        setPassword('');
+        setSubmitted(false);
+    }
+
     if(loggedIn) {
         history.push('/');
     }
@@ -107,10 +118,13 @@ function Login(props) {
                         </Grid>
                         <Grid item>
                         <form name="form" onSubmit={handleSubmit}>
+                            { loginFailed && <Alert className={classes.failureAlert} severity="error">Incorrect email or password</Alert> }
                             <div>
                                 <TextField
                                     id="email-field"
-                                    label={emailError ? "Error" : "Email"}
+                                    label="Email"
+                                    error={emailError}
+                                    helperText={emailError ? 'Email is required' : ''}
                                     value={email}
                                     onChange={handleEmailChange}
                                     variant="filled"
@@ -121,7 +135,9 @@ function Login(props) {
                                 <TextField
                                     id="password-field"
                                     type="password"
-                                    label={passwordError ? "Error" : "Password"}
+                                    label="Password"
+                                    error={passwordError}
+                                    helperText={emailError ? 'Password is required' : ''}
                                     value={password}
                                     onChange={handlePasswordChange}
                                     variant="filled"
@@ -169,10 +185,11 @@ function Login(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { loggingIn, loggedIn } = state.authentication;
+    const { loggingIn, loggedIn, loginFailed } = state.authentication;
     return {
         loggingIn,
-        loggedIn
+        loggedIn,
+        loginFailed
     };
 }
 

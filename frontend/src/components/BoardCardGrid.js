@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { boardActions } from '../actions/board.actions';
-import BoardCard from './BoardCard';
+import { BoardCard } from './BoardCard';
 import { CreateBoardCard } from './CreateBoardCard';
 import { Grid } from '@material-ui/core';
 

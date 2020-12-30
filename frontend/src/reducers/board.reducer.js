@@ -32,6 +32,17 @@ export function board(state = {}, action) {
         };
     case boardConstants.CREATE_FAILURE:
         return {};
+    case boardConstants.REMOVE_REQUEST:
+        return {
+            removingBoard: true
+        };
+    case boardConstants.REMOVE_SUCCESS:
+        return {
+            removedBoard: true,
+            board: action.board
+        };
+    case boardConstants.REMOVE_FAILURE:
+        return {};
     default:
         return state
     }

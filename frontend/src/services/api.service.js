@@ -5,7 +5,8 @@ import { userService } from './user.service';
 export const apiService = {
     getAllBoardsForUser,
     getUserBoard,
-    createUserBoard
+    createUserBoard,
+    removeUserBoard
 };
 
 function getAllBoardsForUser(user) {
@@ -71,6 +72,28 @@ function createUserBoard(name, description, user) {
     .then(board => {
         return board;
     });
+}
+
+function removeUserBoard(boardId, user) {
+    if(!user) {
+        return Promise.reject("Not logged in");
+    }
+
+    const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'Authorization': user.token }
+    }
+
+    return axios({
+        method: requestOptions.method,
+        url: process.env.REACT_APP_API_URL + '/boards/' + boardId,
+        headers: requestOptions.headers,
+    })
+    .then(handleResponse)
+    .then(board => {
+        return board;
+    });
+
 }
 
 function handleResponse(response) {
