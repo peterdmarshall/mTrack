@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Box, Typography, Paper } from '@material-ui/core';
+import { GridList, GridListTile, Box, Typography, Paper } from '@material-ui/core';
 
 import { columnActions } from '../actions/column.actions';
 import { boardActions } from '../actions/board.actions';
@@ -12,10 +12,18 @@ import { Column } from './Column';
 import { CreateColumnButton } from './CreateColumnButton';
 
 const useStyles = makeStyles({
-    paper: {
-        marginTop: '1vh',
-        overflowX: 'auto',
-        height: '100%'
+    root: {
+        display: 'flex',
+        flexGrow: 1,
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        height: '90vh'
+    },
+    gridList: {
+        flexWrap: 'nowrap',
+        // Promote the list into his own layer on Chrome. This costs memory but helps keep high FPS.
+        transform: 'translateZ(0)',
     },
 });
 
@@ -32,7 +40,7 @@ function Board(props) {
 
     useEffect(() => {
         dispatch(columnActions.getAll(boardId, user));
-    }, [column])
+    }, [column]);
 
     if(!user) {
         history.push('/login');
@@ -43,14 +51,14 @@ function Board(props) {
     }
 
     return (
-        <Paper className={classes.paper}>
-            <Grid container position="row" wrap="nowrap">
+        <div className={classes.root}>
+            <GridList cols={5} className={classes.gridList}>
                 { columns && columns.map((column) => {
                     return <Column column={column}></Column>
                 })}
                 <CreateColumnButton />
-            </Grid>
-        </Paper>
+            </GridList>
+        </div>
     );
 }
 

@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Menu, MenuItem, Card, CardHeader, CardContent, CardActionArea, Grid, Typography, IconButton } from '@material-ui/core';
+import { Card, GridListTile, CardHeader, CardContent, CardActionArea, CardActions, Typography, IconButton, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { columnActions } from '../actions/column.actions';
 import { cardActions } from '../actions/card.actions';
 
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles({
-    root: {
-
+    column: {
+        background: '#FFFFFF',
+        margin: '2vh 0.5vw',
+        width: '12vw',
+        minWidth: '250px',
     },
     cardContent: {
         height: '5vh',
@@ -22,6 +26,9 @@ const useStyles = makeStyles({
     },
     cardContentItem: {
         margin: '1%'
+    },
+    inputField: {
+
     }
 });
 
@@ -29,17 +36,37 @@ function CreateColumnButton(props) {
 
     const { dispatch, user, board } = props;
     const classes = useStyles();
+    const [clicked, setClicked] = useState(false);
+    const [columnName, setColumnName] = useState('');
+    const [columnNameError, setColumnNameError] = useState(false);
 
     const content = "New Column";
 
+    const handleClick = () => {
+        setClicked(!clicked);
+        setColumnName('');
+    }
+
+    const handleColumnNameChange = (e) => {
+        const { value } = e.target;
+        setColumnName(value);
+    }
+
     const createColumn = () => {
-        dispatch(columnActions.create('Test', board.id, user));
+        if(columnName && columnName !== '') {
+            dispatch(columnActions.create(columnName, board.id, user));
+            handleClick();
+        } else {
+            setColumnNameError(true);
+        }
     }
 
     return (
-        <Grid item xs={12} md={4} lg={3}>
+        <GridListTile className={classes.column}>
             <Card>
-                <CardActionArea onClick={createColumn}>
+                { !clicked &&
+                <CardActionArea onClick={handleClick}>
+                    
                     <CardContent className={classes.cardContent}>
                         <AddIcon className={classes.cardContentItem}></AddIcon>
                         <Typography className={classes.cardContentItem}>
@@ -47,8 +74,30 @@ function CreateColumnButton(props) {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
+                }
+                { clicked && 
+                    <div>
+                        <CardContent>
+                            <TextField
+                                label="Column name"
+                                error={columnNameError}
+                                helperText={columnNameError ? 'Name is required' : ''}
+                                value={columnName}
+                                onChange={handleColumnNameChange}
+                                variant="filled"
+                                className={classes.inputField}
+                            />
+                        </CardContent>
+                        <CardActions>
+                            <Button onClick={createColumn}>Add Column</Button>
+                            <IconButton onClick={handleClick}>
+                                <CloseIcon />
+                            </IconButton>
+                        </CardActions>
+                    </div>
+                }   
             </Card>
-        </Grid>
+        </GridListTile>
     );
 }
 
