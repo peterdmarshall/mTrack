@@ -5,11 +5,10 @@
 # below each fixture, per the syntax in the comments below
 #
 one: 
-  title: 'Test Title'
-  description: 'Test Body'
-  column: one
+  title: 'Test Column'
+  board: one
 
 two:
-  title: 'Test Title'
-  description: 'Test Body'
-  column: two
+  title: 'Test Column'
+  board: two
+

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { boardActions } from '../actions/board.actions';
 import { BoardCard } from './BoardCard';
 import { CreateBoardCard } from './CreateBoardCard';
@@ -10,7 +9,6 @@ import { Grid } from '@material-ui/core';
 function BoardCardGrid(props) {
 
     const { dispatch, user, boards, board, loadingBoards } = props;
-    const history = useHistory();
 
     useEffect(() => {
         dispatch(boardActions.getAll(user));
@@ -20,7 +18,7 @@ function BoardCardGrid(props) {
         <Grid container >
             { loadingBoards && <p>Loading boards...</p>}
             { boards && boards.map((board) => {
-                return <BoardCard board={board}></BoardCard>
+                return <BoardCard key={board.id} board={board}></BoardCard>
             })}
             <CreateBoardCard />
         </Grid >
