@@ -3,20 +3,25 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControlLabel, Divider, List, ListItem, Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography } from '@material-ui/core';
+import { Grid, Box, Typography, Paper } from '@material-ui/core';
 
 import { columnActions } from '../actions/column.actions';
 import { boardActions } from '../actions/board.actions';
 
-const useStyles = makeStyles({
-    root: {
+import { Column } from './Column';
+import { CreateColumnButton } from './CreateColumnButton';
 
+const useStyles = makeStyles({
+    paper: {
+        marginTop: '1vh',
+        overflowX: 'auto',
+        height: '100%'
     },
 });
 
 function Board(props) {
 
-    const { dispatch, user, board, columns, loadingBoard } = props;
+    const { dispatch, user, board, columns, column, loadingBoard } = props;
     const history = useHistory();
     const classes = useStyles();
     const boardId = props.history.location.state?.boardId;
@@ -24,6 +29,10 @@ function Board(props) {
     useEffect(() => {
         dispatch(boardActions.get(boardId, user));
     }, [boardId]);
+
+    useEffect(() => {
+        dispatch(columnActions.getAll(boardId, user));
+    }, [column])
 
     if(!user) {
         history.push('/login');
@@ -34,11 +43,14 @@ function Board(props) {
     }
 
     return (
-        <div>
-            { board &&
-                <h1>{board.name}</h1>
-            }
-        </div>
+        <Paper className={classes.paper}>
+            <Grid container position="row" wrap="nowrap">
+                { columns && columns.map((column) => {
+                    return <Column column={column}></Column>
+                })}
+                <CreateColumnButton />
+            </Grid>
+        </Paper>
     );
 }
 
@@ -47,12 +59,13 @@ const mapStateToProps = (state) => {
     const { authentication } = state;
     const { user } = authentication;
     const { board, loadingBoard } = state.board;
-    const { columns } = state.column;
+    const { columns, column } = state.column;
     return {
         user,
         board,
         loadingBoard,
-        columns
+        columns,
+        column
     };
 }
 

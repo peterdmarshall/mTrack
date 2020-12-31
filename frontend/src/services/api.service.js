@@ -140,7 +140,7 @@ function createColumn(title, boardId, user) {
     return axios({
         method: requestOptions.method,
         headers: requestOptions.headers,
-        url: process.env.REACT_APP_API_URL + '/boards' + boardId + '/columns',
+        url: process.env.REACT_APP_API_URL + '/boards/' + boardId + '/columns',
         data: requestOptions.body
     })
     .then(handleResponse)
@@ -268,7 +268,7 @@ function handleResponse(response) {
             window.location.reload(true);
         }
 
-        const error = (data) || response.statusText;
+        const error = response.statusText; // (data) || response.statusText;
         return Promise.reject(error);
     }
 

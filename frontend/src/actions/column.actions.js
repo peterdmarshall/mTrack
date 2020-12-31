@@ -11,7 +11,7 @@ export const columnActions = {
 
 function getAll(boardId, user) {
     return dispatch => {
-        dispatch(request);
+        dispatch(request());
 
         apiService.getAllColumns(boardId, user)
             .then(
@@ -25,9 +25,9 @@ function getAll(boardId, user) {
             );
     };
 
-    function request() { return { type: columnConstants.GETALL_CARDS_REQUEST } }
-    function success(columns) { return { type: columnConstants.GETALL_CARDS_SUCCESS, columns} }
-    function failure(error) { return { type: columnConstants.GETALL_CARDS_FAILURE, error } }
+    function request() { return { type: columnConstants.GETALL_REQUEST } }
+    function success(columns) { return { type: columnConstants.GETALL_SUCCESS, columns} }
+    function failure(error) { return { type: columnConstants.GETALL_FAILURE, error } }
 }
 
 

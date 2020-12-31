@@ -12,7 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const useStyles = makeStyles({
     card: {
         background: '#d9d9d9',
-        margin: '2%'
+        margin: '2%',
     },
     cardHeader: {
         background: 'linear-gradient(70deg, #3642CF, #BF37AD)',
