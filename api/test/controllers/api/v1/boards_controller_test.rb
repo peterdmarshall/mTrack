@@ -35,7 +35,7 @@ class Api::V1::BoardsControllerTest < ActionDispatch::IntegrationTest
   test 'should create board' do
     assert_difference('Board.count') do
       post api_v1_boards_url,
-          params: { board: { name: @board.name } },
+          params: { board: { name: @board.name, description: @board.description } },
           headers: { Authorization: JsonWebToken.encode(user_id: @board.user_id) },
           as: :json
     end
@@ -45,7 +45,7 @@ class Api::V1::BoardsControllerTest < ActionDispatch::IntegrationTest
   test 'should forbid create board' do
     assert_no_difference('Board.count') do
       post api_v1_boards_url,
-          params: { board: { name: @board.name } },
+          params: { board: { name: @board.name, description: @board.description } },
           as: :json
     end
     assert_response :forbidden
@@ -53,7 +53,7 @@ class Api::V1::BoardsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should update board' do
     patch api_v1_board_url(@board),
-        params: { board: { name: @board.name } },
+        params: { board: { name: @board.name, description: @board.description } },
         headers: { Authorization: JsonWebToken.encode(user_id: @board.user_id) },
         as: :json
     assert_response :success
@@ -61,7 +61,7 @@ class Api::V1::BoardsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should forbid update board' do
     patch api_v1_board_url(@board),
-        params: { board: { name: @board.name } },
+        params: { board: { name: @board.name, description: @board.description } },
         headers: { Authorization: JsonWebToken.encode(user_id: users(:two).id ) },
         as: :json
     assert_response :forbidden

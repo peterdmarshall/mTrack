@@ -65,7 +65,7 @@ function NavBar(props) {
                     <IconButton 
                         onClick={redirectToHome} 
                         edge="start" 
-                        classname={classes.menuButton} 
+                        className={classes.menuButton} 
                         aria-label="home"
                         color="inherit"
                     >

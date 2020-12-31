@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export const userService = {
     login,
-    logout
+    logout,
+    signup
 };
 
 function login(email, password) {
@@ -25,6 +26,25 @@ function login(email, password) {
 
         return user;
     });
+}
+
+function signup(email, name, password) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: { email: email, password: password } })
+    }
+
+    return axios({
+        method: requestOptions.method,
+        url: process.env.REACT_APP_API_URL + '/users',
+        headers: requestOptions.headers,
+        data: requestOptions.body
+    })
+    .then(handleResponse)
+    .then(user => {
+        return user;
+    })
 }
 
 function logout() {

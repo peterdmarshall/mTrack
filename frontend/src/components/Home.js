@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { BoardCardGrid } from './BoardCardGrid';
 import { LogoutButton } from './LogoutButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControlLabel, Divider, List, ListItem, Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography } from '@material-ui/core';
+import { Hidden, FormControlLabel, Divider, List, ListItem, Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
     h3: {
@@ -40,7 +40,8 @@ function Home(props) {
         <Box>
         <Container>
             <Grid container position="row">
-                <Grid item xs={3}>
+                <Hidden smDown>
+                <Grid item xs={0} md={3}>
                     <Paper className={classes.sideBar}>
                         <List>
                             <ListItem><Typography>Boards</Typography></ListItem>
@@ -49,7 +50,8 @@ function Home(props) {
                         </List>
                     </Paper>
                 </Grid>
-                <Grid item xs={9}>
+                </Hidden>
+                <Grid item xs={12} md={9}>
                     <Paper className={classes.mainContent}>
                         <Typography variant="h5">
                             Your Boards

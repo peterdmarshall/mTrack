@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_013706) do
+ActiveRecord::Schema.define(version: 2020_12_30_221728) do
 
   create_table "boards", force: :cascade do |t|
     t.string "name"
+    t.string "description"
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -21,12 +22,20 @@ ActiveRecord::Schema.define(version: 2020_12_23_013706) do
   end
 
   create_table "cards", force: :cascade do |t|
-    t.integer "board_id"
+    t.integer "column_id"
     t.string "title"
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["board_id"], name: "index_cards_on_board_id"
+    t.index ["column_id"], name: "index_cards_on_column_id"
+  end
+
+  create_table "columns", force: :cascade do |t|
+    t.integer "board_id"
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_columns_on_board_id"
   end
 
   create_table "users", force: :cascade do |t|

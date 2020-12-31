@@ -60,7 +60,7 @@ function Signup(props) {
     const [passwordError, setPasswordError] = useState(false);
 
     const [passwordVerify, setPasswordVerify] = useState('');
-    const [passwordVerifyError, setPasswordVerifyError] = useState('');
+    const [passwordVerifyError, setPasswordVerifyError] = useState(false);
     
     const history = useHistory();
     const classes = useStyles();
@@ -102,7 +102,7 @@ function Signup(props) {
         }
 
         if(email && name && password) {
-            dispatch(userActions.signup(email, password));
+            dispatch(userActions.signup(email, name, password));
         } 
         
         if (!email) {
@@ -199,7 +199,7 @@ function Signup(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { signingUp, signedUp } = state.authentication;
+    const { signingUp, signedUp } = state.user;
     return {
         signingUp,
         signedUp

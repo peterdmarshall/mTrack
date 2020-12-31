@@ -27,7 +27,13 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'destroy user should destroy linked board cards' do
+  test 'destroy user should destroy linked board columns' do
+    assert_difference('Column.count', -1) do
+      users(:one).destroy
+    end
+  end
+
+  test 'destroy user should destroy linked column cards' do
     assert_difference('Card.count', -1) do
       users(:one).destroy
     end
