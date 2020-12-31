@@ -16,7 +16,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flexGrow: 1,
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
+        justifyContent: 'left',
         overflow: 'hidden',
         height: '90vh'
     },
