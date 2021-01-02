@@ -4,13 +4,16 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'fontsource-roboto';
 
-import { store } from './helpers/store';
+import { store, persistor } from './helpers/store';
+import { PersistGate } from 'redux-persist/integration/react'
 import { App } from './components/App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router><App /></Router>
+    <PersistGate loading={null} persistor={persistor}>
+      <Router><App /></Router>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

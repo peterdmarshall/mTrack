@@ -1,10 +1,12 @@
 import { columnConstants } from '../constants/column.constants';
 import { alertActions } from './alert.actions';
 import { apiService } from '../services/api.service';
+import { dispatch } from 'rxjs/internal/observable/pairs';
 
 export const columnActions = {
     getAll,
     create,
+    update,
     remove
 };
 
@@ -52,15 +54,36 @@ function create(title, boardId, user) {
     function failure(error) { return { type: columnConstants.CREATE_FAILURE, error } }
 }
 
-
-function remove(columnId, user) {
+function update(title, boardId, columnId, user) {
     return dispatch => {
         dispatch(request());
 
-        apiService.removeColumn(columnId, user)
+        apiService.updateColumn(title, boardId, columnId, user)
             .then(
-                board => {
-                    dispatch(success(board));
+                column => {
+                    dispatch(success(column));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error.message));
+                }
+            )
+    };
+
+    function request() { return { type: columnConstants.UPDATE_REQUEST } }
+    function success(column) { return { type: columnConstants.UPDATE_SUCCESS, column } }
+    function failure(error) { return { type: columnConstants.UPDATE_FAILURE, error } }
+}
+
+
+function remove(boardId, columnId, user) {
+    return dispatch => {
+        dispatch(request());
+
+        apiService.removeColumn(boardId, columnId, user)
+            .then(
+                column => {
+                    dispatch(success(column));
                 },
                 error => {
                     dispatch(failure(error));

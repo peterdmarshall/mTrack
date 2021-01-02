@@ -7,6 +7,8 @@ module Authenticable
 
         decoded = JsonWebToken.decode(header)
 
+        head :unauthorized if decoded[:expired]
+
         @current_user = User.find(decoded[:user_id]) rescue ActiveRecord::RecordNotFound
     end
 

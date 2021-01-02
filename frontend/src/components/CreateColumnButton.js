@@ -22,13 +22,39 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        background: 'linear-gradient(70deg, #3642CF, #BF37AD)',
+        color: '#FFFFFF',
     },
     cardContentItem: {
         margin: '1%'
     },
     inputField: {
-
+        background: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: '3px',
+    },
+    input: {
+        color: 'rgba(255, 255, 255, 1)',
+    },
+    createColumn: {
+        background: 'linear-gradient(70deg, #3642CF, #BF37AD)',
+        color: '#FFFFFF',
+    },
+    createButton: {
+        color: '#FFFFFF',
+        borderStyle: 'solid',
+        borderWidth: '2px',
+    },
+    cancelButton: {
+        color: '#FFFFFF',
+        borderStyle: 'solid',
+        borderWidth: '2px',
+    },
+    cardActions: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        margin: '0 0.4vw'
     }
 });
 
@@ -45,6 +71,7 @@ function CreateColumnButton(props) {
     const handleClick = () => {
         setClicked(!clicked);
         setColumnName('');
+        setColumnNameError(false);
     }
 
     const handleColumnNameChange = (e) => {
@@ -53,9 +80,9 @@ function CreateColumnButton(props) {
     }
 
     const createColumn = () => {
+        setColumnNameError(false);
         if(columnName && columnName !== '') {
             dispatch(columnActions.create(columnName, board.id, user));
-            handleClick();
         } else {
             setColumnNameError(true);
         }
@@ -76,24 +103,33 @@ function CreateColumnButton(props) {
                 </CardActionArea>
                 }
                 { clicked && 
-                    <div>
-                        <CardContent>
-                            <TextField
-                                label="Column name"
-                                error={columnNameError}
-                                helperText={columnNameError ? 'Name is required' : ''}
-                                value={columnName}
-                                onChange={handleColumnNameChange}
-                                variant="filled"
-                                className={classes.inputField}
-                            />
-                        </CardContent>
-                        <CardActions>
-                            <Button onClick={createColumn}>Add Column</Button>
-                            <IconButton onClick={handleClick}>
-                                <CloseIcon />
-                            </IconButton>
-                        </CardActions>
+                    <div className={classes.createColumn}>
+                        <form onSubmit={createColumn}>
+                            <CardContent>
+                                <TextField
+                                    label="Column title"
+                                    error={columnNameError}
+                                    helperText={columnNameError ? 'Title is required' : ''}
+                                    value={columnName}
+                                    onChange={handleColumnNameChange}
+                                    variant="filled"
+                                    className={classes.inputField}
+                                    autoFocus
+                                    InputProps={{
+                                        className: classes.input
+                                    }}
+                                    InputLabelProps={{
+                                        className: classes.input
+                                    }}
+                                />
+                            </CardContent>
+                            <CardActions className={classes.cardActions}>
+                                <Button className={classes.createButton} type="submit">Add Column</Button>
+                                <IconButton className={classes.cancelButton} onClick={handleClick} size='small'>
+                                    <CloseIcon />
+                                </IconButton>
+                            </CardActions>
+                        </form>
                     </div>
                 }   
             </Card>

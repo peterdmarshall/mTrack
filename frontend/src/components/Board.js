@@ -29,18 +29,22 @@ const useStyles = makeStyles({
 
 function Board(props) {
 
-    const { dispatch, user, board, columns, column, loadingBoard } = props;
+    const { dispatch, user, board, columns, updatedColumn, loadingBoard, removedColumn, createdColumn } = props;
     const history = useHistory();
     const classes = useStyles();
-    const boardId = props.history.location.state?.boardId;
+
 
     useEffect(() => {
-        dispatch(boardActions.get(boardId, user));
-    }, [boardId]);
+        if(board) {
+            dispatch(boardActions.get(board.id, user));
+        }
+    }, []);
 
     useEffect(() => {
-        dispatch(columnActions.getAll(boardId, user));
-    }, [column]);
+        if(board) {
+            dispatch(columnActions.getAll(board.id, user));
+        }
+    }, [updatedColumn, removedColumn, createdColumn, board]);
 
     if(!user) {
         history.push('/login');
@@ -54,7 +58,7 @@ function Board(props) {
         <div className={classes.root}>
             <GridList cols={5} className={classes.gridList}>
                 { columns && columns.map((column) => {
-                    return <Column column={column}></Column>
+                    return <Column key={column.id} column={column}></Column>
                 })}
                 <CreateColumnButton />
             </GridList>
@@ -67,13 +71,15 @@ const mapStateToProps = (state) => {
     const { authentication } = state;
     const { user } = authentication;
     const { board, loadingBoard } = state.board;
-    const { columns, column } = state.column;
+    const { columns, updatedColumn, removedColumn, createdColumn } = state.column;
     return {
         user,
         board,
         loadingBoard,
         columns,
-        column
+        updatedColumn,
+        removedColumn,
+        createdColumn,
     };
 }
 

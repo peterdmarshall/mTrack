@@ -1,3 +1,4 @@
+import { RepeatOneSharp } from '@material-ui/icons';
 import axios from 'axios';
 import { dispatch } from 'rxjs/internal/observable/pairs';
 import { userService } from './user.service';
@@ -9,10 +10,12 @@ export const apiService = {
     removeUserBoard,
     getAllColumns,
     createColumn,
+    updateColumn,
     removeColumn,
     getAllCards,
     getCard,
     createCard,
+    updateCard,
     removeCard
 };
 
@@ -34,7 +37,8 @@ function getAllBoardsForUser(user) {
     .then(handleResponse)
     .then(boards => {
         return boards;
-    });
+    })
+    .catch(handleError);
 }
 
 function getUserBoard(boardId, user) {
@@ -55,7 +59,8 @@ function getUserBoard(boardId, user) {
     .then(handleResponse)
     .then(board => {
         return board;
-    });
+    })
+    .catch(handleError);
 }
 
 function createUserBoard(name, description, user) {
@@ -78,7 +83,8 @@ function createUserBoard(name, description, user) {
     .then(handleResponse)
     .then(board => {
         return board;
-    });
+    })
+    .catch(handleError);
 }
 
 function removeUserBoard(boardId, user) {
@@ -99,7 +105,8 @@ function removeUserBoard(boardId, user) {
     .then(handleResponse)
     .then(board => {
         return board;
-    });
+    })
+    .catch(handleError);
 
 }
 
@@ -123,7 +130,8 @@ function getAllColumns(boardId, user) {
     .then(handleResponse)
     .then(columns => {
         return columns;
-    });
+    })
+    .catch(handleError);
 }
 
 function createColumn(title, boardId, user) {
@@ -146,7 +154,32 @@ function createColumn(title, boardId, user) {
     .then(handleResponse)
     .then(column => {
         return column;
-    });
+    })
+    .catch(handleError);
+}
+
+function updateColumn(title, boardId, columnId, user) {
+    if(!user) {
+        return Promise.reject("Not logged in");
+    }
+
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
+        body: JSON.stringify({ column: { title: title }})
+    };
+
+    return axios({
+        method: requestOptions.method,
+        headers: requestOptions.headers,
+        url: process.env.REACT_APP_API_URL + '/boards/' + boardId + '/columns/' + columnId,
+        data: requestOptions.body
+    })
+    .then(handleResponse)
+    .then(column => {
+        return column;
+    })
+    .catch(handleError);
 }
 
 function removeColumn(boardId, columnId, user) {
@@ -167,7 +200,8 @@ function removeColumn(boardId, columnId, user) {
     .then(handleResponse)
     .then(column => {
         return column;
-    });
+    })
+    .catch(handleError);
 }
 
 
@@ -189,7 +223,8 @@ function getAllCards(boardId, columnId, user) {
     .then(handleResponse)
     .then(cards => {
         return cards;
-    });
+    })
+    .catch(handleError);
 }
 
 function getCard(boardId, columnId, cardId, user) {
@@ -210,7 +245,8 @@ function getCard(boardId, columnId, cardId, user) {
     .then(handleResponse)
     .then(card => {
         return card;
-    });
+    })
+    .catch(handleError);
 }
 
 function createCard(title, description, boardId, columnId, user) {
@@ -227,13 +263,38 @@ function createCard(title, description, boardId, columnId, user) {
     return axios({
         method: requestOptions.method,
         headers: requestOptions.headers,
-        url: process.env.REACT_APP_API_URL + '/boards' + boardId + '/columns/' + columnId + '/cards',
+        url: process.env.REACT_APP_API_URL + '/boards/' + boardId + '/columns/' + columnId + '/cards',
         data: requestOptions.body
     })
     .then(handleResponse)
     .then(card => {
         return card;
-    });
+    })
+    .catch(handleError);
+}
+
+function updateCard(title, description, boardId, columnId, cardId, user) {
+    if(!user) {
+        return Promise.reject("Not logged in");
+    }
+
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
+        body: JSON.stringify({ card: { title: title, description: description }})
+    };
+
+    return axios({
+        method: requestOptions.method,
+        headers: requestOptions.headers,
+        url: process.env.REACT_APP_API_URL + '/boards/' + boardId + '/columns/' + columnId + '/cards/' + cardId,
+        data: requestOptions.body
+    })
+    .then(handleResponse)
+    .then(card => {
+        return card;
+    })
+    .catch(handleError);
 }
 
 function removeCard(boardId, columnId, cardId, user) {
@@ -254,23 +315,50 @@ function removeCard(boardId, columnId, cardId, user) {
     .then(handleResponse)
     .then(card => {
         return card;
-    });
+    })
+    .catch(handleError);
 }
 
 
 function handleResponse(response) {
-    console.log(response);
     const data = response.data;
+
     if (!response.status === 200) {
         if (response.status === 401 || response.status === 403) {
             // auto logout if 401 or 403
-            dispatch(userService.logout());
+            console.log('logging out');
+            userService.logout();
             window.location.reload(true);
         }
-
-        const error = response.statusText; // (data) || response.statusText;
-        return Promise.reject(error);
     }
 
     return data;
+}
+
+function handleError(error) {
+    console.log(error.response.status);
+
+    if (error.response.status === 401 || error.response.status === 403) {
+        // auto logout if 401 or 403
+        console.log('logging out');
+        userService.logout();
+        window.location.reload(true);
+    }
+
+    let errorCode = '';
+
+    switch (error.response.status) {
+        case 500:
+            errorCode = '500 Unauthorized';
+            break;
+        case 401:
+            errorCode = '401 Unauthorized';
+            break;
+        case 403:
+            errorCode = '401 Forbidden';
+            break;
+        default:
+            errorCode = 'Error';
+    }
+    return Promise.reject(errorCode);
 }

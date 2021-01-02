@@ -19,8 +19,8 @@ function getAll(user) {
                     dispatch(success(boards));
                 },
                 error => {
-                    dispatch(failure(error));
-                    dispatch(alertActions.error(error));
+                    dispatch(failure(error.to_s));
+                    dispatch(alertActions.error(error.to_s));
                 }
             )
     };

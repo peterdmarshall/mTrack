@@ -18,9 +18,19 @@ export function column(state = {}, action) {
         };
     case columnConstants.CREATE_SUCCESS:
         return {
-            column: action.column,
+            createdColumn: true,
         };
     case columnConstants.CREATE_FAILURE:
+        return {};
+    case columnConstants.UPDATE_REQUEST:
+        return {
+            updatingColumn: true,
+        };
+    case columnConstants.UPDATE_SUCCESS:
+        return {
+            updatedColumn: action.column,
+        };
+    case columnConstants.UPDATE_FAILURE:
         return {};
     case columnConstants.REMOVE_REQUEST:
         return {
@@ -28,8 +38,7 @@ export function column(state = {}, action) {
         };
     case columnConstants.REMOVE_SUCCESS:
         return {
-            removedColumn: true,
-            column: action.column
+            removedColumn: true
         };
     case columnConstants.REMOVE_FAILURE:
         return {};

@@ -34,8 +34,10 @@ function BoardCard(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
-    const loadBoard = (boardId) => {
-        history.push('/board', { boardId: boardId })
+    const loadBoard = () => {
+        history.push('/board');
+        dispatch(boardActions.get(board.id, user));
+        console.log(board.id);
     }
 
     const handleMenuOpen = (event) => {

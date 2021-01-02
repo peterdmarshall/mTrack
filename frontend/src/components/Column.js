@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Menu, MenuItem, TextField, Card, GridListTile, CardHeader, CardContent, CardActionArea, Grid, Typography, IconButton } from '@material-ui/core';
+import { Menu, MenuItem, TextField, Card, GridListTile, CardHeader, CardContent, CardActionArea, Grid, Typography, IconButton, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { columnActions } from '../actions/board.actions';
+import { columnActions } from '../actions/column.actions';
 import { cardActions } from '../actions/card.actions';
+import { Card as ColumnCard } from './Card';
 
 import AddIcon from '@material-ui/icons/Add';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -25,7 +26,8 @@ const useStyles = makeStyles({
     columnHeader: {
         background: 'linear-gradient(70deg, #3642CF, #BF37AD)',
         color: '#FFFFFF',
-        height: '3vh'
+        height: '3vh',
+        position: 'relative'
     },
     columnContent: {
         height: '10vh',
@@ -45,72 +47,124 @@ const useStyles = makeStyles({
     cardContentItem: {
         margin: '1%'
     },
-    editNameField: {
-        background: "#FFFFFF",
-        
+    editTitleField: {
+        background: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: '3px',
+    },
+    input: {
+        color: 'rgba(255, 255, 255, 1)',
+    },
+    createCardTextField: {
+        background: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: '3px',
+    },
+    createCardContent: {
+        background: '#FFFFFF',
+        margin: '2%',
+        borderRadius: '3px'
     }
 });
 
 function Column(props) {
 
-    const { dispatch, column, user } = props;
+    const { dispatch, column, user, board, cards, newCard, updatedCard } = props;
+
+    const columnCards = cards ? cards[column.id.toString()] : [];
+
     const classes = useStyles();
     
-    const [editingName, setEditingName] = useState(false);
-    const [editedName, setEditedName] = useState('');
-    const editNameNode = useRef();
+    // State for edit column title
+    const [editingTitle, setEditingTitle] = useState(false);
+    const [editedTitle, setEditedTitle] = useState('');
+
+    // State for column menu
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+
+    // State for create card
+    const [creatingCard, setCreatingCard] = useState(false);
+    const [newCardTitle, setNewCardTitle] = useState('');
 
     const content = "Add Card"
 
     useEffect(() => {
-        document.addEventListener("mousedown", handleClick);
+        dispatch(cardActions.getAll(board.id, column.id, user));
+    }, [board.id, column.id, newCard, updatedCard])
 
-        return () => {
-            document.removeEventListener("mousdown", handleClick);
-        };
-    }, [editNameNode]);
-
-    const handleClick = (e) => {
-        if(!editingName) {
-            return;
-        }
-
-        if (editNameNode.current.contains(e.target)) {
-            return;
-        }
-
-        setEditingName(false);
-        setEditedName('');
+    const deleteColumn = () => {
+        dispatch(columnActions.remove(board.id, column.id, user));
+        handleMenuClose();
     }
 
-    const createCard = (columnId) => {
-
+    const editTitle = () => {
+        setEditedTitle(column.title);
+        setEditingTitle(true);
     }
 
-    const editName = () => {
-        setEditingName(true);
-    }
-    const handleEditedNameChange = (e) => {
+    const handleEditedTitleChange = (e) => {
         const { value } = e.target;
-        setEditedName(value);
+        setEditedTitle(value);
     }
 
-    const handleMenuOpen = () => {
-
+    const closeEditTitle = () => {
+        if(editedTitle !== column.title) {
+            updateTitle();
+        } else {
+            setEditingTitle(false);
+            setEditedTitle('');
+        }
     }
 
-    const updateName = () => {
-        console.log("Update name");
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleMenuClose = (event) => {
+        setAnchorEl(null);
+    }
+
+    const updateTitle = () => {
+        if(editedTitle !== '' && editedTitle !== column.title) {
+            dispatch(columnActions.update(editedTitle, board.id, column.id, user));
+        }
+        setEditingTitle(false);
+        setEditedTitle('');
+    }
+
+    const createCard = () => {
+        console.log('create card');
+        if(newCardTitle !== '') {
+            dispatch(cardActions.create(newCardTitle, '', board.id, column.id, user));
+        }
+        closeCreateCard();
+    }
+
+    const handleNewCardTitleChange = (e) => {
+        const { value } = e.target;
+        setNewCardTitle(value);
+    }
+
+    const closeCreateCard = () => {
+        setCreatingCard(false);
+        setNewCardTitle('');
+    }
+
+    const openCreateCard = () => {
+        setCreatingCard(true);
     }
 
     return (
         <GridListTile key={column.id} className={classes.column}>
             <Card className={classes.card}>
-                { !editingName &&
-                <CardActionArea onClick={editName}>
-                    
+                { !editingTitle &&
                     <CardHeader 
-                        title={column.title}
+                        title={
+                            <CardActionArea onClick={editTitle}>
+                                <Typography>
+                                    {column.title}
+                                </Typography>
+                            </CardActionArea>
+                        }
                         titleTypographyProps={{variant:'subtitle1'}}
                         className={classes.columnHeader}
                         action={
@@ -119,26 +173,41 @@ function Column(props) {
                             </IconButton>
                         }
                     />
-                </CardActionArea>
+                
                 }
-                { editingName &&
+                { editingTitle &&
                     <CardHeader
                         className={classes.columnHeader}
                         avatar={
-                            <form name="form" onSubmit={updateName}>
+                            <form name="form" onSubmit={updateTitle}>
                                 <TextField 
-                                    ref={editNameNode}
-                                    label="Change Name"
-                                    value={editedName}
-                                    onChange={handleEditedNameChange}
+                                    value={editedTitle}
+                                    onChange={handleEditedTitleChange}
                                     variant="filled"
-                                    className={classes.editNameField}
+                                    className={classes.editTitleField}
+                                    onBlur={closeEditTitle}
+                                    autoFocus
+                                    size="small"
+                                    InputProps={{
+                                        className: classes.input
+                                    }}
                                 />
                             </form>
                         }
+                        action={
+                            <IconButton onClick={handleMenuOpen} aria-label="options">
+                                <MoreVertIcon />
+                            </IconButton>
+                        }
                     />
                 }
-                <CardActionArea onClick={() => createCard(column.id)}>
+                { columnCards && columnCards.map(card => {
+                    return (
+                        <ColumnCard key={card.id} columnId={column.id} card={card}/>
+                    );
+                })}
+                { !creatingCard &&
+                <CardActionArea onClick={openCreateCard}>
                     <CardContent className={classes.cardContent}>
                         <AddIcon className={classes.cardContentItem}></AddIcon>
                         <Typography className={classes.cardContentItem}>
@@ -146,16 +215,59 @@ function Column(props) {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
+                }
+                { creatingCard &&
+                    <CardContent className={classes.createCardContent}>
+                        <form onSubmit={createCard}>
+                            <TextField 
+                                value={newCardTitle}
+                                onChange={handleNewCardTitleChange}
+                                variant="standard"
+                                className={classes.createCardTextField}
+                                onBlur={closeCreateCard}
+                                autoFocus
+                                fullWidth
+                                size="small"
+                            />
+                            <Button>
+
+                            </Button>
+                        </form>
+                    </CardContent>
+                }
             </Card>
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                id="menuId"
+                keepMounted
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
+            >
+                <MenuItem onClick={() => deleteColumn()}>
+                    <Typography>
+                        Delete
+                    </Typography>
+                    <DeleteIcon />
+                </MenuItem>
+            </Menu>
         </GridListTile>
     );
 }
 
 const mapStateToProps = (state) => {
     const { authentication } = state;
+    const { board } = state.board;
     const { user } = authentication;
+    const { cards, updatedCard } = state.card;
+    const newCard = state.card.card;
     return {
-        user
+        user,
+        board,
+        cards,
+        newCard,
+        updatedCard
     };
 }
 
