@@ -31,7 +31,7 @@ class Api::V1::CardsController < ApplicationController
     # PATCH/PUT /boards/:board_id/columns/:column_id/cards/:id
     # Updates card
     def update
-        if @card.update(card_params)
+        if @card.update(card_params.merge(:column_id => params[:new_column_id]))
             render json: @card
         else
             render json: @card.errors, status: :unprocessable_entity

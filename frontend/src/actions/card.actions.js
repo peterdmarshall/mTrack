@@ -74,11 +74,11 @@ function create(title, description, boardId, columnId, user) {
     function failure(error) { return { type: cardConstants.CREATE_FAILURE, error } }
 }
 
-function update(title, description, boardId, columnId, cardId, user) {
+function update(title, description, boardId, columnId, cardId, user, newColumnId = columnId) {
     return dispatch => {
         dispatch(request(cardId));
 
-        apiService.updateCard(title, description, boardId, columnId, cardId, user)
+        apiService.updateCard(title, description, boardId, columnId, cardId, user, newColumnId)
             .then(
                 card => {
                     dispatch(success(card, columnId));

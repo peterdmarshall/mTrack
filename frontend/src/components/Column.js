@@ -7,6 +7,8 @@ import { columnActions } from '../actions/column.actions';
 import { cardActions } from '../actions/card.actions';
 import { Card as ColumnCard } from './Card';
 
+import { useDrop } from 'react-dnd';
+
 import AddIcon from '@material-ui/icons/Add';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import EditIcon from '@material-ui/icons/Edit';
@@ -67,7 +69,7 @@ const useStyles = makeStyles({
 
 function Column(props) {
 
-    const { dispatch, column, user, board, cards, newCard, updatedCard } = props;
+    const { dispatch, column, user, board, cards, newCard, updatedCard, allowedDropEffect } = props;
 
     const columnCards = cards ? cards[column.id.toString()] : [];
 
@@ -84,6 +86,21 @@ function Column(props) {
     // State for create card
     const [creatingCard, setCreatingCard] = useState(false);
     const [newCardTitle, setNewCardTitle] = useState('');
+
+    // Drag and drop
+    const [{ canDrop, isOver }, drop] = useDrop({
+        accept: 'card',
+        drop: () => ({
+            id: column.id,
+            allowedDropEffect,
+        }),
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+        }),
+    });
+
+    const isActive = canDrop && isOver;
 
     const content = "Add Card"
 
@@ -155,7 +172,7 @@ function Column(props) {
 
     return (
         <GridListTile key={column.id} className={classes.column}>
-            <Card className={classes.card}>
+            <Card className={classes.card} ref={drop}>
                 { !editingTitle &&
                     <CardHeader 
                         title={

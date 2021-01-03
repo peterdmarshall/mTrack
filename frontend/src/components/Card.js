@@ -5,6 +5,7 @@ import { Button, Dialog, DialogContent, DialogTitle, DialogContentText, DialogAc
 import { makeStyles } from '@material-ui/core/styles';
 import { columnActions } from '../actions/column.actions';
 import { cardActions } from '../actions/card.actions';
+import { useDrag } from 'react-dnd';
 
 import AddIcon from '@material-ui/icons/Add';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -34,6 +35,29 @@ function Card(props) {
     const [description, setDescription] = useState(card.description);
 
     const [open, setOpen] = useState(false);
+
+
+    const item = { title, id: card.id, type: 'card' };
+    const [{opacity}, drag] = useDrag({
+        item,
+        end(item, monitor) {
+            const dropResult = monitor.getDropResult();
+            if(item, monitor) {
+                const isDropAllowed = dropResult.allowedDropEffect === 'any' ||
+                    dropResult.allowedDropEffect === dropResult.dropEffect;
+                if (isDropAllowed) {
+                    const actionName = 'moved';
+                    console.log(`You moved Card ${item.id} into Column ${dropResult.id}`);
+                    dispatch(cardActions.update(card.title, card.description, board.id, columnId, card.id, user, dropResult.id));
+                } else {
+                    console.log('cannot drop');
+                }
+            }
+        },
+        collect: (monitor) => ({
+            opacity: monitor.isDragging() ? 0.4 : 1,
+        }),
+    });
 
     const handleOpen = () => {
         setOpen(true);
@@ -65,12 +89,12 @@ function Card(props) {
     return (
         <div>
             <CardActionArea onClick={handleOpen}>
-                <CardContent className={classes.cardContent}>
+                <CardContent className={classes.cardContent} ref={drag} style={{ opacity }}>
                     {title}
                 </CardContent>
             </CardActionArea>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
+                <DialogTitle id="form-dialog-title">Edit Card</DialogTitle>
                 <DialogContent>
                     <TextField
                         id="name"

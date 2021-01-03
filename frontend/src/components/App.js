@@ -5,6 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { NavBar } from './NavBar';
 
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend'
+import { DndProvider } from 'react-dnd';
+import {isMobile} from 'react-device-detect';
+
 
 import { alertActions } from '../actions/alert.actions';
 import { PrivateRoute } from './PrivateRoute';
@@ -24,22 +29,23 @@ function App(props) {
       dispatch(alertActions.clear());
     });
   }, []);
-  
 
 
   return (
-    <Box>
-      {user && <NavBar></NavBar> }
-      {user && alert.message &&
-        <div>{alert.message}</div>
-      }
-      <Switch>
-          <PrivateRoute exact path="/" component={Home} />
-          <PrivateRoute path="/board" component={Board} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-      </Switch>
-    </Box>
+    <DndProvider backend={HTML5Backend}>
+      <Box>
+        {user && <NavBar></NavBar> }
+        {user && alert.message &&
+          <div>{alert.message}</div>
+        }
+        <Switch>
+            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute path="/board" component={Board} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+        </Switch>
+      </Box>
+    </DndProvider>
   );
 }
 

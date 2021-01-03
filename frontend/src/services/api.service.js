@@ -273,7 +273,7 @@ function createCard(title, description, boardId, columnId, user) {
     .catch(handleError);
 }
 
-function updateCard(title, description, boardId, columnId, cardId, user) {
+function updateCard(title, description, boardId, columnId, cardId, user, newColumnId = columnId) {
     if(!user) {
         return Promise.reject("Not logged in");
     }
@@ -281,7 +281,7 @@ function updateCard(title, description, boardId, columnId, cardId, user) {
     const requestOptions = {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
-        body: JSON.stringify({ card: { title: title, description: description }})
+        body: JSON.stringify({ card: { title: title, description: description }, new_column_id: newColumnId })
     };
 
     return axios({
