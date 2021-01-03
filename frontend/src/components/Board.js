@@ -58,7 +58,7 @@ function Board(props) {
         <div className={classes.root}>
             <GridList cols={5} className={classes.gridList}>
                 { columns && columns.map((column) => {
-                    return <Column key={column.id} column={column} allowedDropEffect="move"></Column>
+                    return <Column key={column.id} column={column} allowedDropEffect="any"></Column>
                 })}
                 <CreateColumnButton />
             </GridList>

@@ -69,7 +69,7 @@ const useStyles = makeStyles({
 
 function Column(props) {
 
-    const { dispatch, column, user, board, cards, newCard, updatedCard, allowedDropEffect } = props;
+    const { dispatch, column, user, board, cards, newCard, updatedCard, removedCard, allowedDropEffect } = props;
 
     const columnCards = cards ? cards[column.id.toString()] : [];
 
@@ -106,7 +106,7 @@ function Column(props) {
 
     useEffect(() => {
         dispatch(cardActions.getAll(board.id, column.id, user));
-    }, [board.id, column.id, newCard, updatedCard])
+    }, [board.id, column.id, newCard, updatedCard, removedCard]);
 
     const deleteColumn = () => {
         dispatch(columnActions.remove(board.id, column.id, user));
@@ -277,14 +277,15 @@ const mapStateToProps = (state) => {
     const { authentication } = state;
     const { board } = state.board;
     const { user } = authentication;
-    const { cards, updatedCard } = state.card;
+    const { cards, updatedCard, removedCard } = state.card;
     const newCard = state.card.card;
     return {
         user,
         board,
         cards,
         newCard,
-        updatedCard
+        updatedCard,
+        removedCard
     };
 }
 

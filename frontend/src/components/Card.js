@@ -25,6 +25,9 @@ const useStyles = makeStyles({
         margin: '2%',
         borderRadius: '3px'
     },
+    deleteButton: {
+        color: '#de161d'
+    }
 });
 
 function Card(props) {
@@ -46,9 +49,15 @@ function Card(props) {
                 const isDropAllowed = dropResult.allowedDropEffect === 'any' ||
                     dropResult.allowedDropEffect === dropResult.dropEffect;
                 if (isDropAllowed) {
-                    const actionName = 'moved';
-                    console.log(`You moved Card ${item.id} into Column ${dropResult.id}`);
-                    dispatch(cardActions.update(card.title, card.description, board.id, columnId, card.id, user, dropResult.id));
+                    const isCopyAction = dropResult.dropEffect === 'copy';
+                    const actionName = isCopyAction ? 'copied' : 'moved';
+                    if(actionName === 'moved') {
+                        console.log(`You moved Card ${item.id} into Column ${dropResult.id}`);
+                        dispatch(cardActions.update(card.title, card.description, board.id, columnId, card.id, user, dropResult.id));
+                    } else if(actionName === 'copied') {
+                        console.log(`You copied Card ${item.id} to Column ${dropResult.id}`);
+                        dispatch(cardActions.create(card.title, card.description, board.id, dropResult.id, user));
+                    }
                 } else {
                     console.log('cannot drop');
                 }
@@ -86,6 +95,11 @@ function Card(props) {
         setOpen(false);
     }
 
+    const deleteCard = () => {
+        dispatch(cardActions.remove(board.id, columnId, card.id, user));
+        setOpen(false);
+    }
+
     return (
         <div>
             <CardActionArea onClick={handleOpen}>
@@ -94,7 +108,9 @@ function Card(props) {
                 </CardContent>
             </CardActionArea>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Edit Card</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                    <Typography>Edit Card</Typography>
+                </DialogTitle>
                 <DialogContent>
                     <TextField
                         id="name"
@@ -116,6 +132,9 @@ function Card(props) {
                     />
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={deleteCard} className={classes.deleteButton}>
+                        Delete
+                    </Button>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
