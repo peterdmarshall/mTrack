@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2020_12_30_221728) do
     t.integer "column_id"
     t.string "title"
     t.string "description"
+    t.integer "position"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["column_id"], name: "index_cards_on_column_id"

@@ -4,28 +4,31 @@ export function card(state = {}, action) {
     switch (action.type) {
     case cardConstants.GET_REQUEST:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             loadingCard: true,
         };
     case cardConstants.GET_SUCCESS:
         return {
-            ...state,
+            cards: state.cards,
             loadingCard: false,
             card: action.card,
         };
     case cardConstants.GET_FAILURE:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             loadingCard: false,
         };
     case cardConstants.GETALL_REQUEST:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             loadingCards: true,
         };
     case cardConstants.GETALL_SUCCESS:
         return {
-            ...state,
+            card: state.card,
             loadingCards: false,
             cards: {
                 ...state.cards,
@@ -34,58 +37,85 @@ export function card(state = {}, action) {
         };
     case cardConstants.GETALL_FAILURE:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             loadingCards: false,
         };
     case cardConstants.CREATE_REQUEST:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             creatingCard: true,
         };
     case cardConstants.CREATE_SUCCESS:
         return {
-            ...state,
+            cards: state.cards,
             creatingCard: false,
             card: action.card,
         };
     case cardConstants.CREATE_FAILURE:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             creatingCard: false,
         };
     case cardConstants.UPDATE_REQUEST:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             updatingCard: true
         };
     case cardConstants.UPDATE_SUCCESS:
         return {
-            ...state,
+            cards: state.cards,
             updatingCard: false,
             updatedCard: true,
             card: action.card
         };
     case cardConstants.UPDATE_FAILURE:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             updatingCard: false,
         };
     case cardConstants.REMOVE_REQUEST:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             removingCard: true
         };
     case cardConstants.REMOVE_SUCCESS:
         return {
-            ...state,
+            cards: state.cards,
             removingCard: false,
             removedCard: true,
             card: action.card
         };
     case cardConstants.REMOVE_FAILURE:
         return {
-            ...state,
+            card: state.card,
+            cards: state.cards,
             removingCard: false,
+        };
+    case cardConstants.UPDATE_ALL_REQUEST:
+        let key = action.columnId;
+        return {
+            card: state.card,
+            cards: state.cards,
+            updatingAllCards: true,
+        };
+    case cardConstants.UPDATE_ALL_SUCCESS:
+        return {
+            card: state.card,
+            updatingAllCards: false,
+            updatedAllCards: true,
+            cards: action.cards
+        };
+    case cardConstants.UPDATE_ALL_FAILURE:
+        return {
+            card: state.card,
+            cards: state.cards,
+            updatingAllCards: false,
         };
     default:
         return state

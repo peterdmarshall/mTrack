@@ -12,6 +12,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { Draggable } from "react-beautiful-dnd";
+
 const useStyles = makeStyles({
     column: {
         background: '#d9d9d9',
@@ -67,7 +69,7 @@ const useStyles = makeStyles({
 
 function Column(props) {
 
-    const { dispatch, column, user, board, cards, newCard, updatedCard } = props;
+    const { dispatch, column, user, board, cards, newCard, updatedCard, removedCard, updatedAllCards, updatedColumn, provided, innerRef } = props;
 
     const columnCards = cards ? cards[column.id.toString()] : [];
 
@@ -89,7 +91,7 @@ function Column(props) {
 
     useEffect(() => {
         dispatch(cardActions.getAll(board.id, column.id, user));
-    }, [board.id, column.id, newCard, updatedCard])
+    }, [board.id, column.id, newCard, updatedCard, removedCard, updatedAllCards])
 
     const deleteColumn = () => {
         dispatch(columnActions.remove(board.id, column.id, user));
@@ -134,7 +136,8 @@ function Column(props) {
     const createCard = () => {
         console.log('create card');
         if(newCardTitle !== '') {
-            dispatch(cardActions.create(newCardTitle, '', board.id, column.id, user));
+            let position = cards[column.id].length + 1; 
+            dispatch(cardActions.create(newCardTitle, '', position, board.id, column.id, user));
         }
         closeCreateCard();
     }
@@ -154,6 +157,10 @@ function Column(props) {
     }
 
     return (
+        <div
+            {...provided.droppableProps}
+            ref={innerRef}
+        >
         <GridListTile key={column.id} className={classes.column}>
             <Card className={classes.card}>
                 { !editingTitle &&
@@ -201,11 +208,26 @@ function Column(props) {
                         }
                     />
                 }
-                { columnCards && columnCards.map(card => {
+                { columnCards && columnCards.map((card, index) => {
                     return (
-                        <ColumnCard key={card.id} columnId={column.id} card={card}/>
+                        <Draggable 
+                            key={card.id} 
+                            draggableId={`${card.id}`} 
+                            index={card.position}
+                            disableInteractiveElementBlocking={true}
+                        >
+                            {(provided, snapshot) => (
+                                <ColumnCard 
+                                    innerRef={provided.innerRef} 
+                                    columnId={column.id} 
+                                    card={card}
+                                    provided={provided}
+                                ></ColumnCard>
+                            )}
+                        </Draggable>
                     );
                 })}
+                {provided.placeholder}
                 { !creatingCard &&
                 <CardActionArea onClick={openCreateCard}>
                     <CardContent className={classes.cardContent}>
@@ -253,6 +275,7 @@ function Column(props) {
                 </MenuItem>
             </Menu>
         </GridListTile>
+        </div>
     );
 }
 
@@ -260,14 +283,17 @@ const mapStateToProps = (state) => {
     const { authentication } = state;
     const { board } = state.board;
     const { user } = authentication;
-    const { cards, updatedCard } = state.card;
+    const { cards, updatedCard, removedCard, updatedAllCards, updatedColumn } = state.card;
     const newCard = state.card.card;
     return {
         user,
         board,
         cards,
         newCard,
-        updatedCard
+        updatedCard,
+        removedCard,
+        updatedAllCards,
+        updatedColumn
     };
 }
 

@@ -14,7 +14,7 @@ class Api::V1::CardsController < ApplicationController
     # GET /boards/:board_id/columns/:column_id/cards
     # Returns all cards in column
     def index
-        render json: Card.where(column: @column).all
+        render json: Card.where(column: @column).all.order(:position)
     end
 
     # POST /boards/:board_id/columns/:column_id/cards
@@ -31,16 +31,30 @@ class Api::V1::CardsController < ApplicationController
     # PATCH/PUT /boards/:board_id/columns/:column_id/cards/:id
     # Updates card
     def update
-        if @card.update(card_params)
+        if @card.update(card_params.merge(:column_id => params[:update_column_id]))
             render json: @card
         else
             render json: @card.errors, status: :unprocessable_entity
         end
     end
 
+    # PATCH /boards/:board_id/cards
+    # Updates all cards
+    def update_all
+        cards = params[:cards]
+        # Update every card in the cards array with its new position
+        cards.each do |card|
+            current_card = Card.find_by(id: card[:id])
+            current_card.update(title: card[:title], description: card[:description], position: card[:position], column_id: card[:column_id])
+        end
+
+        render json: Card.where(column: @column).all
+    end
+
     # DELETE /boards/:board_id/columns/:column_id/cards/:id
     # Deletes card
     def destroy
+        # TODO: re-order remaining cards
         @card.destroy
         head 204
     end
@@ -64,6 +78,6 @@ class Api::V1::CardsController < ApplicationController
     end
 
     def card_params
-        params.require(:card).permit(:title, :description)
+        params.require(:card).permit(:title, :description, :position)
     end
 end

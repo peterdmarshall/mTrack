@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 });
 
 function Card(props) {
-    const { dispatch, columnId, user, board, card } = props;
+    const { dispatch, columnId, user, board, card, provided, innerRef } = props;
     const classes = useStyles();
 
     const [title, setTitle] = useState(card.title);
@@ -57,13 +57,21 @@ function Card(props) {
 
     const updateCard = () => {
         if(title !== '') {
-            dispatch(cardActions.update(title, description, board.id, columnId, card.id, user));
+            dispatch(cardActions.update(title, description, card.position, board.id, columnId, card.id, user));
         }
         setOpen(false);
     }
 
+    const deleteCard = () => {
+        dispatch(cardActions.remove(board.id, columnId, card.id, user));
+        setOpen(false);
+    }
+
     return (
-        <div>
+        <div 
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={innerRef}>
             <CardActionArea onClick={handleOpen}>
                 <CardContent className={classes.cardContent}>
                     {title}
@@ -92,6 +100,9 @@ function Card(props) {
                     />
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={deleteCard}>
+                        Delete
+                    </Button>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>

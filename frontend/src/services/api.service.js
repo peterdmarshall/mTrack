@@ -16,6 +16,7 @@ export const apiService = {
     getCard,
     createCard,
     updateCard,
+    updateAllCards,
     removeCard
 };
 
@@ -249,7 +250,7 @@ function getCard(boardId, columnId, cardId, user) {
     .catch(handleError);
 }
 
-function createCard(title, description, boardId, columnId, user) {
+function createCard(title, description, position, boardId, columnId, user) {
     if(!user) {
         return Promise.reject("Not logged in");
     }
@@ -257,7 +258,7 @@ function createCard(title, description, boardId, columnId, user) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
-        body: JSON.stringify({ card: { title: title, description: description }})
+        body: JSON.stringify({ card: { title: title, description: description, position: position }})
     };
 
     return axios({
@@ -273,7 +274,7 @@ function createCard(title, description, boardId, columnId, user) {
     .catch(handleError);
 }
 
-function updateCard(title, description, boardId, columnId, cardId, user) {
+function updateCard(title, description, position, boardId, columnId, cardId, user) {
     if(!user) {
         return Promise.reject("Not logged in");
     }
@@ -281,7 +282,7 @@ function updateCard(title, description, boardId, columnId, cardId, user) {
     const requestOptions = {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
-        body: JSON.stringify({ card: { title: title, description: description }})
+        body: JSON.stringify({ card: { title: title, description: description, position: position }, update_column_id: columnId})
     };
 
     return axios({
@@ -293,6 +294,30 @@ function updateCard(title, description, boardId, columnId, cardId, user) {
     .then(handleResponse)
     .then(card => {
         return card;
+    })
+    .catch(handleError);
+}
+
+function updateAllCards(reorderedCards, boardId, user) {
+    if(!user) {
+        return Promise.reject("Not logged in");
+    }
+
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': user.token },
+        body: JSON.stringify({ cards : reorderedCards })
+    }
+
+    return axios({
+        method: requestOptions.method,
+        headers: requestOptions.headers,
+        url: process.env.REACT_APP_API_URL + '/boards/' + boardId + '/cards',
+        data: requestOptions.body
+    })
+    .then(handleResponse)
+    .then(cards => {
+        return cards;
     })
     .catch(handleError);
 }

@@ -7,7 +7,8 @@ export const cardActions = {
     get,
     create,
     remove,
-    update
+    update,
+    updateAll
 };
 
 function getAll(boardId, columnId, user) {
@@ -53,11 +54,11 @@ function get(boardId, columnId, cardId, user) {
 }
 
 
-function create(title, description, boardId, columnId, user) {
+function create(title, description, position, boardId, columnId, user) {
     return dispatch => {
         dispatch(request(columnId));
 
-        apiService.createCard(title, description, boardId, columnId, user)
+        apiService.createCard(title, description, position, boardId, columnId, user)
             .then(
                 card => {
                     dispatch(success(card, columnId));
@@ -74,11 +75,11 @@ function create(title, description, boardId, columnId, user) {
     function failure(error) { return { type: cardConstants.CREATE_FAILURE, error } }
 }
 
-function update(title, description, boardId, columnId, cardId, user) {
+function update(title, description, position, boardId, columnId, cardId, user) {
     return dispatch => {
         dispatch(request(cardId));
 
-        apiService.updateCard(title, description, boardId, columnId, cardId, user)
+        apiService.updateCard(title, description, position, boardId, columnId, cardId, user)
             .then(
                 card => {
                     dispatch(success(card, columnId));
@@ -93,6 +94,27 @@ function update(title, description, boardId, columnId, cardId, user) {
     function request() { return { type: cardConstants.UPDATE_REQUEST } }
     function success(card, columnId) { return { type: cardConstants.UPDATE_SUCCESS, card, columnId } }
     function failure(error) { return { type: cardConstants.UPDATE_FAILURE, error } }
+}
+
+function updateAll(reorderedCards, boardId, user) {
+    return dispatch => {
+        dispatch(request(reorderedCards));
+
+        apiService.updateAllCards(reorderedCards, boardId, user)
+            .then(
+                cards => {
+                    dispatch(success(cards));
+                },  
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error.message));
+                }
+            );
+    };
+
+    function request(reorderedCards) { return { type: cardConstants.UPDATE_ALL_REQUEST, reorderedCards } }
+    function success(cards) { return { type: cardConstants.UPDATE_ALL_SUCCESS, cards} }
+    function failure(error) { return { type: cardConstants.UPDATE_ALL_FAILURE, error } }
 }
 
 function remove(boardId, columnId, cardId, user) {

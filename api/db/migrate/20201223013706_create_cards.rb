@@ -4,6 +4,7 @@ class CreateCards < ActiveRecord::Migration[6.0]
       t.belongs_to :column
       t.string :title
       t.string :description
+      t.integer :position
 
       t.timestamps
     end
