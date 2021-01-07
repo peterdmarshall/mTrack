@@ -25,7 +25,8 @@ function login(email, password) {
         localStorage.setItem('user', JSON.stringify(user));
 
         return user;
-    });
+    })
+    .catch(handleError);
 }
 
 function signup(email, name, password) {
@@ -45,6 +46,7 @@ function signup(email, name, password) {
     .then(user => {
         return user;
     })
+    .catch(handleError);
 }
 
 function logout() {
@@ -67,4 +69,10 @@ function handleResponse(response) {
     }
 
     return data;
+}
+
+function handleError(error) {
+    if (!error.response || error.code == 'ECONNABORTED') {
+        return Promise.reject('Network Error');
+    }
 }
