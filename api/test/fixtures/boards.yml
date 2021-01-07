@@ -6,5 +6,6 @@
 #
 one:
   name: 'Test Board Name'
+  description: 'Test Description'
   user: one
   

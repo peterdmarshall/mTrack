@@ -7,4 +7,9 @@
 one: 
   title: 'Test Title'
   description: 'Test Body'
-  board: one
+  column: one
+
+two:
+  title: 'Test Title'
+  description: 'Test Body'
+  column: two
