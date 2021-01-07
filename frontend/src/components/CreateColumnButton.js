@@ -79,10 +79,12 @@ function CreateColumnButton(props) {
         setColumnName(value);
     }
 
-    const createColumn = () => {
+    const createColumn = (e) => {
+        e.preventDefault();
         setColumnNameError(false);
         if(columnName && columnName !== '') {
             dispatch(columnActions.create(columnName, board.id, user));
+            handleClick();
         } else {
             setColumnNameError(true);
         }

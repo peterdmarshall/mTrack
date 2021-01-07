@@ -24,8 +24,6 @@ function App(props) {
       dispatch(alertActions.clear());
     });
   }, []);
-  
-
 
   return (
     <Box>

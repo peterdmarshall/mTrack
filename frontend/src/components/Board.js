@@ -14,6 +14,7 @@ import { CreateColumnButton } from './CreateColumnButton';
 
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { ContactsOutlined } from '@material-ui/icons';
+import { userActions } from '../actions/user.actions';
 
 const useStyles = makeStyles({
     root: {
@@ -94,7 +95,7 @@ const move = (sourceCards, destinationCards, droppableSource, droppableDestinati
 
 function Board(props) {
 
-    const { dispatch, user, board, cards, columns, updatedColumn, loadingBoard, removedColumn, createdColumn } = props;
+    const { dispatch, user, loggedIn, board, cards, columns, updatedColumn, loadingBoard, removedColumn, createdColumn } = props;
     const history = useHistory();
     const classes = useStyles();
 
@@ -112,7 +113,8 @@ function Board(props) {
 
     
 
-    if(!user) {
+    if(!loggedIn) {
+        dispatch(userActions.logout());
         history.push('/login');
     }
 
@@ -176,7 +178,7 @@ function Board(props) {
 
 const mapStateToProps = (state) => {
     const { authentication } = state;
-    const { user } = authentication;
+    const { user, loggedIn } = authentication;
     const { board, loadingBoard } = state.board;
     const { columns, updatedColumn, removedColumn, createdColumn } = state.column;
     const { cards } = state.card;
@@ -188,7 +190,8 @@ const mapStateToProps = (state) => {
         updatedColumn,
         removedColumn,
         createdColumn,
-        cards
+        cards,
+        loggedIn
     };
 }
 

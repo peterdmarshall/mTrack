@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { BoardCardGrid } from './BoardCardGrid';
 import { LogoutButton } from './LogoutButton';
 import { makeStyles } from '@material-ui/core/styles';
+import { userActions } from '../actions/user.actions';
 import { Hidden, FormControlLabel, Divider, List, ListItem, Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -28,11 +29,12 @@ const useStyles = makeStyles({
 });
 
 function Home(props) {
-    const { user } = props;
+    const { dispatch, user, loggedIn } = props;
     const history = useHistory();
     const classes = useStyles();
 
-    if(!user) {
+    if(!loggedIn) {
+        dispatch(userActions.logout());
         history.push('/login');
     }
 
@@ -67,12 +69,13 @@ function Home(props) {
 
 const mapStateToProps = (state) => {
     const { authentication } = state;
-    const { user } = authentication;
+    const { user, loggedIn } = authentication;
     const { boards, loadingBoards } = state.board;
     return {
         user,
         boards,
-        loadingBoards
+        loadingBoards,
+        loggedIn
     };
 }
 
