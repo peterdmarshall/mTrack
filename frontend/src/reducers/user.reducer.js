@@ -11,6 +11,10 @@ export function user(state = {}, action) {
             signedUp: true,
         };
     case userConstants.SIGNUP_FAILURE:
+        return {
+            signupFailure: true,
+        };
+    case userConstants.LOGIN_CLEAR:
         return {};
     default:
         return state

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Paper, TextField, CircularProgress, Container, Grid, Box } from '@material-ui/core';
+import { Button, Paper, TextField, CircularProgress, Container, Grid, Box, Typography, Link } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 import { userActions } from '../actions/user.actions';
 
@@ -65,7 +66,7 @@ function Signup(props) {
     const history = useHistory();
     const classes = useStyles();
 
-    const { dispatch, signingUp, signedUp } = props;
+    const { dispatch, signingUp, signedUp, signupFailure } = props;
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
@@ -129,7 +130,10 @@ function Signup(props) {
                 <Grid container justify="center">
                     <Grid container item xs={9} spacing={3} direction="column">
                         <Grid item container justify="center">
-                            <h1>Sign Up</h1>
+                            <Typography variant="h2">mTrack</Typography>
+                        </Grid>
+                        <Grid item container justify="center">
+                            <Typography variant="h4">Sign Up</Typography>
                         </Grid>
                         <Grid item>
                         <form name="form" onSubmit={handleSubmit}>
@@ -187,7 +191,20 @@ function Signup(props) {
                                 {!signingUp && <Button className={classes.signupButton} type="submit">Sign Up</Button>}
                                 { signingUp && <CircularProgress />}
                             </div>
+                            <div>
+                                { signupFailure &&
+                                    <Alert severity="error" >Signup Failed</Alert>
+                                }
+                            </div>
                         </form>
+                        <Grid container justify="center">
+                            <Grid item className={classes.links}>
+                                <Typography>
+                                    Already have an account?
+                                    <Link href="/login">Log In</Link>
+                                </Typography>
+                            </Grid>
+                        </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -199,10 +216,11 @@ function Signup(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { signingUp, signedUp } = state.user;
+    const { signingUp, signedUp, signupFailure } = state.user;
     return {
         signingUp,
-        signedUp
+        signedUp,
+        signupFailure
     };
 }
 
