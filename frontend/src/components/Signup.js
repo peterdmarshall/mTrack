@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Paper, TextField, CircularProgress, Container, Grid, Box } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 import { userActions } from '../actions/user.actions';
 
@@ -65,7 +66,7 @@ function Signup(props) {
     const history = useHistory();
     const classes = useStyles();
 
-    const { dispatch, signingUp, signedUp } = props;
+    const { dispatch, signingUp, signedUp, signupFailure } = props;
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
@@ -187,6 +188,11 @@ function Signup(props) {
                                 {!signingUp && <Button className={classes.signupButton} type="submit">Sign Up</Button>}
                                 { signingUp && <CircularProgress />}
                             </div>
+                            <div>
+                                { signupFailure &&
+                                    <Alert severity="error" >Signup Failed</Alert>
+                                }
+                            </div>
                         </form>
                         </Grid>
                     </Grid>
@@ -199,10 +205,11 @@ function Signup(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { signingUp, signedUp } = state.user;
+    const { signingUp, signedUp, signupFailure } = state.user;
     return {
         signingUp,
-        signedUp
+        signedUp,
+        signupFailure
     };
 }
 

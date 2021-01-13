@@ -5,7 +5,8 @@ import { alertActions } from './alert.actions';
 export const userActions = {
     login,
     logout,
-    signup
+    signup,
+    clearLogin,
 };
 
 function login(email, password) {
@@ -53,4 +54,8 @@ function signup(email, name, password) {
 function logout() {
     userService.logout();
     return { type: userConstants.LOGOUT }
+}
+
+function clearLogin() {
+    return { type: userConstants.LOGIN_CLEAR }
 }

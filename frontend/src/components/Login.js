@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -64,6 +64,10 @@ function Login(props) {
     const classes = useStyles();
 
     const { dispatch, loggingIn, loggedIn, loginFailed } = props;
+
+    useEffect(() => {
+        dispatch(userActions.clearLogin());
+    }, []);
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
