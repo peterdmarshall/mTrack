@@ -118,11 +118,13 @@ function Login(props) {
                 <Grid container justify="center">
                     <Grid container item xs={9} spacing={3} direction="column">
                         <Grid item container justify="center">
-                            <h1>Login</h1>
+                            <Typography variant="h2">mTrack</Typography>
+                        </Grid>
+                        <Grid item container justify="center">
+                            <Typography variant="h4">Login</Typography>
                         </Grid>
                         <Grid item>
                         <form name="form" onSubmit={handleSubmit}>
-                            { loginFailed && <Alert className={classes.failureAlert} severity="error">Incorrect email or password</Alert> }
                             <div>
                                 <TextField
                                     id="email-field"
@@ -165,6 +167,7 @@ function Login(props) {
                                 {!loggingIn && <Button className={classes.loginButton} type="submit">Login</Button>}
                                 { loggingIn && <CircularProgress />}
                             </div>
+                            { loginFailed && <Alert className={classes.failureAlert} severity="error">Login Failed: Incorrect email or password</Alert> }
                         </form>
                         <Grid container justify="center">
                             <Grid item className={classes.links}>

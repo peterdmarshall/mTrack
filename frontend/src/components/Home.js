@@ -24,7 +24,19 @@ const useStyles = makeStyles({
     mainContent: {
         height: '70vh',
         margin: '1vh',
+        borderRadius: '1vh',
         background: '#e6e6e6'
+    },
+    header: {
+        paddingTop: '1vh',
+        paddingBottom: '1vh',
+        paddingLeft: '2vh',
+        borderRadius: '0.3vh',
+        background: 'linear-gradient(70deg, #3642CF, #BF37AD)',
+        color: '#FFFFFF'
+    },
+    boardGrid: {
+        margin: '1vh'
     }
 });
 
@@ -37,23 +49,16 @@ function Home(props) {
         <Box>
         <Container>
             <Grid container position="row">
-                <Hidden smDown>
-                <Grid item xs={0} md={3}>
-                    <Paper className={classes.sideBar}>
-                        <List>
-                            <ListItem><Typography>Boards</Typography></ListItem>
-                            <Divider />
-                            <ListItem><Typography>Templates</Typography></ListItem>
-                        </List>
-                    </Paper>
-                </Grid>
-                </Hidden>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12}>
                     <Paper className={classes.mainContent}>
-                        <Typography variant="h5">
-                            Your Boards
-                        </Typography>
-                        <BoardCardGrid />
+                        <div className={classes.header}>
+                            <Typography variant="h4">
+                                Your Boards
+                            </Typography>
+                        </div>
+                        <div className={classes.boardGrid}>
+                            <BoardCardGrid />
+                        </div>
                     </Paper>
                 </Grid>
             </Grid>

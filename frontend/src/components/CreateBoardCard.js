@@ -66,7 +66,7 @@ function CreateBoardCard(props) {
     }
 
     return (
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={12} md={4} lg={3}>
             <Card className={classes.card}>
                 <CardActionArea onClick={handleOpen}>
                 { !creatingBoard &&
