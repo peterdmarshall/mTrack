@@ -33,11 +33,6 @@ function Home(props) {
     const history = useHistory();
     const classes = useStyles();
 
-    if(!loggedIn) {
-        dispatch(userActions.logout());
-        history.push('/login');
-    }
-
     return (
         <Box>
         <Container>
