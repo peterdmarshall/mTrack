@@ -111,13 +111,6 @@ function Board(props) {
         }
     }, [updatedColumn, removedColumn, createdColumn, board]);
 
-    
-
-    if(!loggedIn) {
-        dispatch(userActions.logout());
-        history.push('/login');
-    }
-
     if(loadingBoard) {
         return <p>Loading...</p>
     }

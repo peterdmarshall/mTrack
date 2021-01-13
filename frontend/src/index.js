@@ -8,13 +8,16 @@ import { store, persistor } from './helpers/store';
 import { PersistGate } from 'redux-persist/integration/react'
 import { App } from './components/App';
 import reportWebVitals from './reportWebVitals';
+import HttpsRedirect from 'react-https-redirect';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router><App /></Router>
-    </PersistGate>
-  </Provider>,
+  <HttpsRedirect>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router><App /></Router>
+      </PersistGate>
+    </Provider>
+  </HttpsRedirect>,
   document.getElementById('root')
 );
 
